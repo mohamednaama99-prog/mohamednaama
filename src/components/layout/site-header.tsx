@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import { useState, type CSSProperties } from "react";
 import { Menu, X } from "lucide-react";
 
+import { BrandLockup } from "@/components/brand/brand-lockup";
 import { WhatsAppIcon } from "@/components/icons/whatsapp";
+import { SocialLinks } from "@/components/layout/social-links";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,37 +16,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { nav, site, stickyCta, whatsappLink } from "@/content/site";
+import {
+  legalNav,
+  mobileNav,
+  nav,
+  stickyCta,
+  whatsappLink,
+} from "@/content/site";
 import { useScrolled } from "@/hooks/use-scrolled";
 import { cn } from "@/lib/utils";
 
-function Wordmark({ onDeep }: { onDeep: boolean }) {
-  return (
-    <Link
-      href="/"
-      className="group/mark flex cursor-pointer items-baseline gap-2"
-      aria-label={`${site.name} — home`}
-    >
-      <span
-        className={cn(
-          "font-display text-[1.0625rem] tracking-tight transition-colors",
-          onDeep ? "text-mist-100" : "text-ink",
-        )}
-        style={{ fontVariationSettings: '"wdth" 112, "wght" 700' }}
-      >
-        MOHAMED NAAMA
-      </span>
-      <span
-        aria-hidden
-        className="h-1.5 w-1.5 rounded-full bg-tan-500 transition-transform duration-300 ease-entrance group-hover/mark:scale-125"
-      />
-    </Link>
-  );
-}
-
 /**
  * `overlay` sits transparently on the landing page's dark hero and turns solid
- * on scroll. `solid` is for pages that open on a light surface, such as /apply.
+ * on scroll. `solid` is for pages that open on a light surface.
  */
 export function SiteHeader({
   variant = "overlay",
@@ -75,15 +59,24 @@ export function SiteHeader({
       )}
     >
       <div className="container-page flex h-16 items-center justify-between gap-6 sm:h-20">
-        <Wordmark onDeep={onDeep} />
+        {/* Mark only. The wordmark stays available on the lockup for the
+            footer and anywhere else the full name is wanted. */}
+        <BrandLockup
+          tone={onDeep ? "deep" : "light"}
+          showWordmark={false}
+          className="shrink-0"
+        />
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
+        <nav
+          aria-label="Primary"
+          className="hidden items-center gap-7 lg:flex xl:gap-8"
+        >
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "relative cursor-pointer text-sm transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-tan-500 after:transition-all after:duration-300 after:ease-entrance hover:after:w-full",
+                "relative cursor-pointer text-sm whitespace-nowrap transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-tan-500 after:transition-all after:duration-300 after:ease-entrance hover:after:w-full",
                 onDeep
                   ? "text-mist-100/80 hover:text-mist-100"
                   : "text-ink-muted hover:text-ink",
@@ -117,15 +110,15 @@ export function SiteHeader({
             </SheetTrigger>
 
             {/* The built-in close is a 28px ghost button, which all but
-                disappears on the navy panel. Ours is a 44px target with a
-                visible border. */}
+                disappears on the navy panel. Ours is a 44px target. */}
             <SheetContent
               side="right"
               showCloseButton={false}
               className="border-line-deep bg-navy-900 data-[side=right]:w-full sm:data-[side=right]:max-w-sm"
             >
-              <div className="flex items-center justify-between border-b border-line-deep px-4 py-4">
-                <SheetTitle className="font-display text-mist-100">Menu</SheetTitle>
+              <div className="flex shrink-0 items-center justify-between border-b border-line-deep px-5 py-4">
+                <SheetTitle className="sr-only">Menu</SheetTitle>
+                <BrandLockup tone="deep" showWordmark={false} />
 
                 <SheetClose asChild>
                   <button
@@ -138,24 +131,53 @@ export function SiteHeader({
                 </SheetClose>
               </div>
 
-              <nav
-                aria-label="Mobile"
-                className="flex flex-1 flex-col gap-1 px-4 py-6"
-              >
-                {nav.map((item, i) => (
-                  <SheetClose asChild key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="anim-in flex min-h-12 cursor-pointer items-center border-b border-line-deep/60 font-display text-2xl text-mist-100 transition-colors hover:text-tan-500"
-                      style={{ "--d": `${80 + i * 60}ms` } as CSSProperties}
-                    >
-                      {item.label}
-                    </Link>
-                  </SheetClose>
-                ))}
-              </nav>
+              {/* Scrolls only when the list genuinely outgrows the screen. */}
+              <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5">
+                <nav aria-label="Mobile" className="flex flex-col gap-7">
+                  <ul className="flex flex-col">
+                    {mobileNav.map((item, i) => (
+                      <li key={item.href}>
+                        <SheetClose asChild>
+                          <Link
+                            href={item.href}
+                            className="anim-in flex min-h-12 cursor-pointer items-center border-b border-line-deep/60 font-display text-xl text-mist-100 transition-colors hover:text-tan-500"
+                            style={
+                              { "--d": `${60 + i * 45}ms` } as CSSProperties
+                            }
+                          >
+                            {item.label}
+                          </Link>
+                        </SheetClose>
+                      </li>
+                    ))}
+                  </ul>
 
-              <div className="flex flex-col gap-3 px-4 pb-8">
+                  <div className="flex flex-col gap-3">
+                    <h2 className="t-eyebrow text-ink-ondeep-muted">Legal</h2>
+                    <ul className="flex flex-col gap-2.5">
+                      {legalNav.map((item) => (
+                        <li key={item.href}>
+                          <SheetClose asChild>
+                            <Link
+                              href={item.href}
+                              className="cursor-pointer text-sm text-mist-100/70 transition-colors hover:text-tan-500"
+                            >
+                              {item.label}
+                            </Link>
+                          </SheetClose>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <h2 className="t-eyebrow text-ink-ondeep-muted">Follow</h2>
+                    <SocialLinks tone="deep" />
+                  </div>
+                </nav>
+              </div>
+
+              <div className="flex shrink-0 flex-col gap-3 border-t border-line-deep px-5 pt-4 pb-7">
                 <SheetClose asChild>
                   <Button asChild size="xl" variant="accent" className="w-full">
                     <Link href={stickyCta.href}>{stickyCta.label}</Link>

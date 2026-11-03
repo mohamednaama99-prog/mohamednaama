@@ -145,7 +145,10 @@ export const formCopy = {
   eyebrow: "Apply",
   heading: "Tell Mohamed about your training.",
   lede: "One short form, whether you want a specific plan or just have a question. Mohamed picks the conversation up on WhatsApp from there.",
-  planHeading: "Which plan are you applying for?",
+  planHeading: "Your plan",
+  contactHeading: "How close do you want the contact?",
+  contactHelp:
+    "Weekly means a check-in once a week. Daily means a check-in every training day, priority replies to questions during the day, and more frequent performance follow-ups.",
   submitLabel: "Send application",
   submittingLabel: "Sending…",
   success: {

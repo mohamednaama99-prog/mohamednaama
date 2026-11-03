@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Git worktrees live under .claude/ inside this repo; without this,
+    // ESLint walks their build output and reports thousands of problems
+    // that have nothing to do with the project source.
+    ".claude/**",
   ]),
 ]);
 

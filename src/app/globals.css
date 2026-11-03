@@ -152,8 +152,10 @@
 
   html {
     @apply font-sans;
-    scroll-behavior: smooth;
-    /* the sticky header must not cover an anchored section */
+    /* No `scroll-behavior: smooth` here on purpose: it turns every route
+       change into an animated scroll starting from the previous page's
+       offset, which is what made /apply open mid-page and the homepage come
+       back at the bottom. Anchor jumps are instant and predictable instead. */
     scroll-padding-top: 6rem;
   }
 
@@ -407,10 +409,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {

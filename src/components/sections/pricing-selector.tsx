@@ -78,6 +78,12 @@ export function PricingSelector() {
 
                 <p className="text-sm text-ink-muted">{pkg.tagline}</p>
 
+                {/* The difference between the two plans, on the card, so it is
+                    not discovered for the first time in the form. */}
+                <p className="rounded-lg border border-tan-500/35 bg-tan-100/60 px-4 py-3 text-sm text-ink">
+                  {pkg.support}
+                </p>
+
                 {/* The weekly rate is the headline, but the total commitment
                     is stated just as plainly right beneath it. */}
                 <div className="flex flex-col gap-2 border-y border-line py-6">

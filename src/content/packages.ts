@@ -23,6 +23,12 @@ export type CoachingPackage = {
   tagline: string;
   /** CONFIRMED by client. */
   price: { weekly: number; total: number; currency: "USD" };
+  /**
+   * The communication difference, stated on the card itself so nobody has to
+   * reach the application form to discover what separates the two plans.
+   * Deliberately free of availability promises.
+   */
+  support: string;
   /** PROVISIONAL — awaiting the client's real inclusions. */
   features: string[];
   recommended?: boolean;
@@ -57,6 +63,7 @@ export const packages: CoachingPackage[] = [
     name: "Weekly Coaching",
     termLabel: "3 months",
     tagline: "Structure and review, week by week.",
+    support: "Weekly check-ins and ongoing coaching support between them.",
     price: { weekly: 55, total: 660, currency: "USD" },
     features: weeklyFeatures,
   },
@@ -68,6 +75,8 @@ export const packages: CoachingPackage[] = [
     name: "Daily Coaching",
     termLabel: "3 months",
     tagline: "Close contact, every training day.",
+    support:
+      "Daily check-ins, priority replies to your questions during the day, and more frequent performance follow-ups.",
     price: { weekly: 75, total: 900, currency: "USD" },
     features: dailyFeatures,
     recommended: true,
@@ -80,6 +89,7 @@ export const packages: CoachingPackage[] = [
     name: "Weekly Coaching",
     termLabel: "6 months",
     tagline: "The same rhythm, with room for real change.",
+    support: "Weekly check-ins and ongoing coaching support between them.",
     price: { weekly: 40, total: 960, currency: "USD" },
     features: weeklyFeatures,
   },
@@ -91,6 +101,8 @@ export const packages: CoachingPackage[] = [
     name: "Daily Coaching",
     termLabel: "6 months",
     tagline: "The deepest level of accountability offered.",
+    support:
+      "Daily check-ins, priority replies to your questions during the day, and more frequent performance follow-ups.",
     price: { weekly: 60, total: 1440, currency: "USD" },
     features: dailyFeatures,
     recommended: true,
@@ -157,7 +169,9 @@ export type ComparisonRow = {
 
 export const comparison: ComparisonRow[] = [
   { feature: "Programme written for you", weekly: true, daily: true },
-  { feature: "Check-in rhythm", weekly: "Once a week", daily: "Every training day" },
+  { feature: "Check-ins", weekly: "Once a week", daily: "Every training day" },
+  { feature: "Questions during the day", weekly: "Answered at your weekly check-in", daily: "Priority replies" },
+  { feature: "Performance follow-ups", weekly: "Weekly", daily: "More frequent" },
   { feature: "Programme adjustments", weekly: "Weekly review", daily: "Session by session" },
   { feature: "Technique review on video", weekly: true, daily: true },
   { feature: "Nutrition guidance and targets", weekly: true, daily: true },

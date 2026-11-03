@@ -27,24 +27,36 @@ export const site = {
    *  whatsappLink() below — never a hardcoded wa.me URL. */
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "13476537295",
 
-  /** TODO(client): social profiles. Omitted from the UI while null. */
+  /**
+   * TODO(client): the actual profile URLs.
+   *
+   * These stay null until real profiles are supplied — the footer and mobile
+   * menu render nothing for a null entry rather than linking to a platform
+   * home page. Set them here or through the matching env vars.
+   */
   social: {
-    instagram: null as string | null,
-    youtube: null as string | null,
-    tiktok: null as string | null,
+    instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? null,
+    tiktok: process.env.NEXT_PUBLIC_TIKTOK_URL ?? null,
+    facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL ?? null,
   },
 
   /** TODO(client): contact email for the footer and form receipts. */
   email: null as string | null,
 } as const;
 
-/* Absolute so they work from /apply as well as the landing page. */
+/* Absolute so they work from /apply and the supporting pages, not just the
+   landing page. About and Contact are real pages now; Coaching, Plans and FAQ
+   remain sections of the homepage. */
 export const nav = [
-  { label: "About", href: "/#about" },
+  { label: "About", href: "/about" },
   { label: "Coaching", href: "/#experience" },
   { label: "Plans", href: "/#plans" },
   { label: "FAQ", href: "/#faq" },
+  { label: "Contact", href: "/contact" },
 ] as const;
+
+/** The mobile menu leads with Home, which the desktop header gets from the logo. */
+export const mobileNav = [{ label: "Home", href: "/" }, ...nav] as const;
 
 /** CONFIRMED by client. Do not change without client sign-off. */
 export const credentials = [
@@ -98,6 +110,50 @@ export const stickyCta = {
   label: "Apply for coaching",
   href: "/apply",
 } as const;
+
+/** Policy pages, kept apart from the main navigation. */
+export const legalNav = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Refunds & Cancellation", href: "/refunds" },
+] as const;
+
+export type SocialPlatform = "instagram" | "tiktok" | "facebook";
+
+/** Fixed display order, independent of whether a URL exists yet. */
+export const socialPlatforms: SocialPlatform[] = [
+  "instagram",
+  "tiktok",
+  "facebook",
+];
+
+/**
+ * Every platform, with its URL when one has been supplied and null when it has
+ * not. The icon is shown either way; a null entry renders as a non-interactive
+ * placeholder rather than a link to a platform home page.
+ */
+export function socialEntries(): { platform: SocialPlatform; href: string | null }[] {
+  return socialPlatforms.map((platform) => ({
+    platform,
+    href: site.social[platform] ?? null,
+  }));
+}
+
+/**
+ * The coach's number, formatted for display and for a tel: link.
+ * Derived from the same single source as the WhatsApp link.
+ */
+export function phoneNumber() {
+  const digits = site.whatsappNumber;
+  if (!digits || digits.length !== 11 || !digits.startsWith("1")) return null;
+
+  const national = digits.slice(1);
+  return {
+    e164: `+${digits}`,
+    display: `+1 (${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`,
+    tel: `tel:+${digits}`,
+  };
+}
 
 /** Builds a wa.me link, or null when the number has not been supplied yet. */
 export function whatsappLink(message?: string): string | null {

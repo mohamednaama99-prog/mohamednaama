@@ -11,6 +11,7 @@ import {
 } from "@/app/actions/submit-application";
 import { SegmentedControl } from "@/components/primitives/segmented-control";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -255,64 +256,94 @@ export function ApplicationForm({
 
       {/* Plan — the same two choices as the pricing section, in the same
           shape, so nothing is asked twice in two different ways. */}
-      <fieldset className="flex flex-col gap-5 rounded-xl border border-line bg-surface-sunken p-5 sm:p-6">
+      {/* Plan. Stacked rather than side by side: two segmented controls in a
+          two-column grid never line up once their labels differ in length, and
+          the contact question matters enough to stand on its own row. */}
+      <fieldset className="flex flex-col gap-6 rounded-xl border border-line bg-surface-sunken p-5 sm:p-6">
         <legend className="px-1 text-sm font-medium text-ink">
           {formCopy.planHeading}
         </legend>
 
         <input type="hidden" name="packageId" value={packageId} />
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="flex flex-col gap-2">
-            <span className="t-eyebrow text-ink-muted">Term</span>
-            <SegmentedControl
-              label="Coaching term"
-              value={String(months)}
-              onValueChange={(value) => setMonths(Number(value) as Months)}
-              segments={termOptions}
-              size="sm"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <span className="t-eyebrow text-ink-muted">Contact</span>
-            <SegmentedControl
-              label="Coaching frequency"
-              value={cadence}
-              onValueChange={setCadence}
-              segments={cadenceSegments}
-              size="sm"
-            />
-          </div>
+        <div className="flex flex-col gap-2.5">
+          <span className="t-eyebrow text-ink-muted">Term</span>
+          <SegmentedControl
+            label="Coaching term"
+            value={String(months)}
+            onValueChange={(value) => setMonths(Number(value) as Months)}
+            segments={termOptions}
+            size="sm"
+          />
         </div>
 
-        {/* Says back exactly what the two controls add up to, so the choice is
+        <div className="flex flex-col gap-2.5 border-t border-line pt-5">
+          <h3 className="font-display text-base text-ink">
+            {formCopy.contactHeading}
+          </h3>
+          <p className="max-w-[58ch] text-xs text-ink-muted">
+            {formCopy.contactHelp}
+          </p>
+          <SegmentedControl
+            label="How close do you want the contact?"
+            value={cadence}
+            onValueChange={setCadence}
+            segments={cadenceSegments}
+            size="sm"
+            className="mt-1"
+          />
+        </div>
+
+        {/* Says back exactly what the two choices add up to, so the plan is
             never left to be inferred from two separate toggles. */}
         <div
           aria-live="polite"
-          className="rounded-lg border border-line bg-surface-raised px-4 py-3.5"
+          className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 rounded-lg border border-line bg-surface-raised px-4 py-4"
         >
+          <div className="flex min-w-0 flex-col gap-1">
+            <span className="t-eyebrow text-ink-muted">Selected plan</span>
+            {chosen ? (
+              <>
+                <span
+                  className="font-display text-lg leading-tight text-ink"
+                  style={{ fontVariationSettings: '"wdth" 110, "wght" 680' }}
+                >
+                  {chosen.name}
+                </span>
+                <span data-numeric className="text-sm text-ink-muted">
+                  {chosen.termLabel} · {chosen.weeks} weeks
+                </span>
+              </>
+            ) : (
+              <>
+                <span
+                  className="font-display text-lg leading-tight text-ink"
+                  style={{ fontVariationSettings: '"wdth" 110, "wght" 680' }}
+                >
+                  General enquiry
+                </span>
+                <span className="text-sm text-ink-muted">
+                  Mohamed will recommend a plan.
+                </span>
+              </>
+            )}
+          </div>
+
           {chosen ? (
-            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <p className="font-display text-base text-ink">
-                {chosen.name} — {chosen.termLabel}
-              </p>
-              <p data-numeric className="text-sm text-ink-muted">
-                <span className="font-medium text-ink">
-                  {formatUsd(chosen.price.weekly)}
-                </span>{" "}
-                per week ·{" "}
-                <span className="font-medium text-ink">
-                  {formatUsd(chosen.price.total)}
-                </span>{" "}
-                total
-              </p>
+            <div className="flex flex-col items-start gap-0.5 sm:items-end">
+              <span
+                data-numeric
+                className="font-display text-2xl leading-none text-ink"
+                style={{ fontVariationSettings: '"wdth" 110, "wght" 700' }}
+              >
+                {formatUsd(chosen.price.weekly)}
+              </span>
+              <span className="text-xs text-ink-muted">per week</span>
+              <span data-numeric className="text-sm text-ink-muted">
+                {formatUsd(chosen.price.total)} total
+              </span>
             </div>
-          ) : (
-            <p className="text-sm text-ink-muted">
-              No plan selected — Mohamed will recommend one.
-            </p>
-          )}
+          ) : null}
         </div>
 
         {errors.packageId ? (
@@ -441,18 +472,22 @@ export function ApplicationForm({
 
           return (
             <div key={field.name} className="flex flex-col gap-2">
-              <div className="flex items-start gap-3">
-                <input
+              {/* A 44px tap area around a 20px control: the label is part of
+                  the target, so the box itself does not have to be large. */}
+              <label
+                htmlFor={id}
+                className="-m-2 flex cursor-pointer items-start gap-3 rounded-lg p-2 transition-colors hover:bg-surface-sunken"
+              >
+                <Checkbox
                   id={id}
                   name={field.name}
-                  type="checkbox"
                   aria-invalid={Boolean(error)}
-                  className="mt-0.5 size-5 shrink-0 cursor-pointer rounded-sm border border-line-strong accent-navy-800"
+                  className="mt-0.5 size-5 shrink-0 cursor-pointer border-line-strong data-[state=checked]:border-navy-800 data-[state=checked]:bg-navy-800 data-[state=checked]:text-mist-100"
                 />
-                <Label htmlFor={id} className="text-sm leading-relaxed text-ink-muted">
+                <span className="text-sm leading-relaxed text-ink-muted">
                   {field.label}
-                </Label>
-              </div>
+                </span>
+              </label>
               {error ? (
                 <p role="alert" className="text-xs text-destructive">
                   {error}
