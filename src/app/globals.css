@@ -1,26 +1,427 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================================
+   Harbour — design tokens for Coach Mohamed Naama
+   Navy / off-white / muted tan. Single deliberate light theme; the navy
+   bands are design, not an OS-driven dark mode.
+   Contrast ratios are measured, not estimated — see docs/01-audit-and-direction.md
+   ========================================================================= */
+
+@theme {
+  /* ---- Navy: primary ink and weighted surfaces ---- */
+  --color-navy-900: #091729;
+  --color-navy-800: #0e2344;
+  --color-navy-700: #16305a;
+  --color-navy-600: #27416e;
+  --color-navy-400: #5b7097;
+  /* navy-400 measures only 3.6:1 on navy-900 — it fails AA as text.
+     navy-300 is the muted ink for dark bands at 5.5:1. */
+  --color-navy-300: #7c8faf;
+
+  /* ---- Cool neutrals, biased toward the navy ---- */
+  --color-mist-50: #f7f9fb;
+  --color-mist-100: #f0f4f7;
+  --color-mist-200: #e2e8ef;
+  --color-mist-300: #c9d4e0;
+  --color-steel-500: #5c6b80;
+
+  /* ---- Tan: the subtle accent ---- */
+  --color-tan-100: #f4ede5;
+  --color-tan-200: #e8ddd2;
+  --color-tan-500: #b1967d;
+  --color-tan-700: #6f5a45;
+
+  /* ---- Functional ---- */
+  --color-sage-600: #3f7d63;
+
+  /* ---- Semantic surface + ink tokens (what components should use) ---- */
+  --color-surface: var(--color-mist-100);
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: var(--color-mist-50);
+  --color-surface-warm: var(--color-tan-100);
+  --color-surface-deep: var(--color-navy-900);
+
+  --color-ink: var(--color-navy-800);
+  --color-ink-muted: var(--color-steel-500);
+  --color-ink-ondeep: var(--color-mist-100);
+  --color-ink-ondeep-muted: var(--color-navy-300);
+
+  /* tan-500 reads 2.5:1 on the light page — decorative only.
+     tan-700 (5.9:1) is the accent for words on light surfaces. */
+  --color-accent-fill: var(--color-tan-500);
+  --color-accent-text: var(--color-tan-700);
+
+  --color-line: var(--color-mist-200);
+  --color-line-strong: var(--color-mist-300);
+  --color-line-deep: var(--color-navy-600);
+
+  /* ---- Type ---- */
+  --font-display: var(--font-archivo), "Arial Black", system-ui, sans-serif;
+  --font-sans: var(--font-geist-sans), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ---- Motion ---- */
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-state: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Elevation: airy and wide, never a grey blur ---- */
+  --shadow-soft: 0 1px 2px rgba(14, 35, 68, 0.04), 0 12px 32px rgba(14, 35, 68, 0.05);
+  --shadow-lift: 0 2px 4px rgba(14, 35, 68, 0.05), 0 24px 56px rgba(14, 35, 68, 0.1);
+
+  /* ---- Layout ---- */
+  --container-page: 1200px;
+  --container-wide: 1440px;
 }
 
+/* shadcn/ui semantic variables, remapped onto Harbour so every primitive
+   inherits the brand without being restyled one by one. */
+:root {
+  color-scheme: light;
+
+  --font-archivo-fallback: "Arial Black", system-ui, sans-serif;
+
+  --background: var(--color-mist-100);
+  --foreground: var(--color-navy-800);
+
+  --card: #ffffff;
+  --card-foreground: var(--color-navy-800);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-navy-800);
+
+  --primary: var(--color-navy-800);
+  --primary-foreground: var(--color-mist-100);
+
+  --secondary: var(--color-tan-500);
+  --secondary-foreground: var(--color-navy-800);
+
+  --muted: var(--color-mist-200);
+  --muted-foreground: var(--color-steel-500);
+
+  /* shadcn's --accent is a subtle hover wash, not the brand accent. */
+  --accent: var(--color-tan-100);
+  --accent-foreground: var(--color-navy-800);
+
+  --destructive: #b4381f;
+
+  --border: var(--color-mist-200);
+  --input: var(--color-mist-300);
+  --ring: var(--color-tan-500);
+
+  --radius: 1rem;
+}
+
+/* shadcn's own theme bridge. These map its semantic variables onto Tailwind
+   utilities (bg-primary, border-border, text-muted-foreground, …) and must
+   live here — the `shadcn/tailwind.css` import supplies keyframes and
+   utilities only, not this mapping. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+
+  --font-heading: var(--font-display);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+    /* the sticky header must not cover an anchored section */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    @apply bg-surface text-ink antialiased;
+    font-size: 1rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    font-variation-settings: "wdth" 112, "wght" 680;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-tan-200);
+    color: var(--color-navy-800);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-tan-500);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Numbers that stack in columns must not jitter. */
+  .tabular,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Tailwind v4 follows the browser default of `cursor: default` on buttons.
+     Anything that can be clicked should say so — and nothing that cannot. */
+  button:not(:disabled),
+  summary,
+  label[for],
+  select,
+  a[href],
+  [role="button"]:not([aria-disabled="true"]),
+  [role="radio"]:not([aria-disabled="true"]),
+  [role="tab"],
+  [role="option"],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  input[type="file"]:not(:disabled),
+  [data-slot="select-trigger"],
+  [data-slot="accordion-trigger"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 3rem);
+  }
+
+  .container-wide {
+    width: 100%;
+    max-width: var(--container-wide);
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 3rem);
+  }
+
+  .section-y {
+    padding-block: clamp(5rem, 9vw, 9rem);
+  }
+
+  /* Fluid display scale */
+  /* Re-tuned for phones rather than merely clamped: the authored line breaks
+     have to survive a 375px screen without wrapping, and tight tracking that
+     reads as confident at 90px reads as cramped at 32px. */
+  .t-display-xl {
+    font-family: var(--font-display);
+    /* Sized for the split hero: the text column is ~54% of the container, so
+       the authored line breaks have to fit roughly 630px at the top end. */
+    font-size: clamp(2rem, 4.3vw, 4rem);
+    font-variation-settings: "wdth" 110, "wght" 700;
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+
+  @media (min-width: 40rem) {
+    .t-display-xl {
+      font-variation-settings: "wdth" 112, "wght" 700;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+  }
+
+  .t-display-l {
+    font-family: var(--font-display);
+    font-size: clamp(2.125rem, 4.6vw, 3.5rem);
+    font-variation-settings: "wdth" 110, "wght" 680;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .t-h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    font-variation-settings: "wdth" 108, "wght" 640;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+  }
+
+  .t-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .t-lede {
+    font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
+    line-height: 1.65;
+  }
+
+  /* A hairline that carries the accent without using tan as text. */
+  .rule-accent {
+    border-top: 2px solid var(--color-tan-500);
+    width: 2.5rem;
+  }
+}
+
+/* =========================================================================
+   Motion
+   Entrances are weighted: fast off the floor, decelerating under control.
+   Everything here is transform/opacity only.
+   ========================================================================= */
+
+@keyframes harbour-line-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes harbour-soft-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes harbour-media-settle {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes harbour-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2.5%, -3%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@layer components {
+  /* Hero: masked line-by-line reveal.
+
+     The animations are gated behind `.reveal-ready` — the same class the boot
+     script adds — so the hero is never *dependent* on an animation running to
+     become visible. Without JS it paints immediately, which also keeps the
+     headline available to LCP rather than hiding it behind a delay. */
+  .anim-line-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  .reveal-ready .anim-line-mask > span {
+    display: block;
+    animation: harbour-line-rise 0.8s var(--ease-entrance) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .reveal-ready .anim-in {
+    animation: harbour-soft-in 0.65s var(--ease-entrance) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .reveal-ready .anim-media {
+    animation: harbour-media-settle 1.2s var(--ease-entrance) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* Barely-perceptible background movement behind the hero and CTA band. */
+  .anim-drift {
+    animation: harbour-drift 26s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .anim-drift-slow {
+    animation: harbour-drift 38s ease-in-out infinite reverse;
+    will-change: transform;
+  }
+}
+
+/* Scroll reveals.
+   The hidden state is applied only once the inline boot script has set
+   .reveal-ready on <html>, so with JS disabled every section renders
+   normally instead of staying invisible. */
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease-entrance),
+    transform 0.7s var(--ease-entrance);
+  transition-delay: var(--d, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal-ready [data-reveal="scale"] {
+  transform: translateY(18px) scale(0.985);
+}
+
+.reveal-ready [data-reveal][data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-ready [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
