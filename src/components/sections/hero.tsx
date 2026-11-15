@@ -12,12 +12,13 @@ const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 /**
  * `sizes` has to describe the width the image is *rendered* at, not the width
- * of the viewport. Under `object-cover` in a tall container those differ a
- * lot: at 375x715 the 4:5 crop renders ~572px wide, which is ~152vw. Claiming
- * 100vw is what made the browser pick a 750px file and upscale it ~2.9x.
+ * of the viewport. Below `lg` the tall crop is shown at exactly the screen
+ * width. From `lg` up the 4:3 crop fills a box 60% of the viewport wide but is
+ * scaled by its height under `object-cover`, so it renders at roughly
+ * 70–92vw.
  */
-const MOBILE_SIZES = "160vw";
-const DESKTOP_SIZES = "100vw";
+const MOBILE_SIZES = "100vw";
+const DESKTOP_SIZES = "92vw";
 
 /*
  * No `priority` and no `quality` here, both deliberate for Next 16:
@@ -58,18 +59,26 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-surface-deep pt-28 pb-14 text-ink-ondeep sm:pt-32 lg:min-h-[92svh] lg:items-center lg:pb-20"
+      className="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-surface-deep pt-[64vw] pb-14 text-ink-ondeep lg:min-h-[92svh] lg:items-center lg:pt-32 lg:pb-20"
     >
       {/*
-        Art-directed background: a 4:5 crop below lg, the 3:2 crop from lg up.
-        One <picture>, so exactly one file downloads. The section's min-height
-        reserves the space, so nothing shifts when the image arrives, and this
-        is the LCP element on both — `priority` rides along from getImageProps.
+        Art-directed: a tall crop below lg, a 4:3 crop from lg up. One
+        <picture>, so exactly one file downloads. The image is absolutely
+        positioned and sized from its width/height attributes, so nothing
+        shifts when it arrives.
 
-        object-position 50% 30% is correct for both crops at once: below lg
-        cover scales by height, so only the horizontal value applies and 50%
-        centres him; from lg up it scales by width, so only the vertical value
-        applies and 30% keeps his face clear of the top edge.
+        The coach sits opposite the headline at every width:
+        - Below lg the photo spans the screen width at its natural aspect, so
+          the coach fills the width at the top. His hands land at 60.5% of the
+          image width, which is why the text band starts at 64vw: the eyebrow
+          sits just under his hands and never over him. The photo's foot
+          fades into the section navy behind the text; the fade is steeper
+          from sm up because the text there sits higher on a taller image.
+          Both stops were tuned against measured contrast, not by eye.
+        - From lg up the photo fills the right 60% of the section and is
+          scaled by its height, so he is as large as the frame allows without
+          cropping a hand. Its left edge dissolves into the navy the headline
+          sits on.
       */}
       <picture>
         <source
@@ -84,22 +93,24 @@ export function Hero() {
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 -z-10 h-full w-full object-cover object-[50%_34%]"
+          className="absolute inset-x-0 top-0 -z-10 h-auto w-full [mask-image:linear-gradient(to_bottom,#000_38%,transparent_64%)] sm:[mask-image:linear-gradient(to_bottom,#000_36%,transparent_52%)] lg:inset-y-0 lg:right-0 lg:left-auto lg:h-full lg:w-3/5 lg:object-cover lg:object-[55%_50%] lg:[mask-image:none]"
         />
       </picture>
 
       {/*
-        Navy veil, measured against the rendered page rather than estimated.
-        Roughly 11:1 behind the headline at 1440 and 13:1 at 375 — both past
-        the 4.5:1 AA threshold for body copy.
+        Navy veil. Measured on the rendered page (worst pixel behind each line
+        of text), not estimated — the figures are recorded in
+        public/images/README.md.
       */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        {/* Lighter than the previous photograph needed: this frame is
-            already dark and desaturated, so the old veil flattened it to
-            near-black. Measured after re-tuning rather than guessed. */}
-        <div className="absolute inset-0 bg-navy-900/25 lg:bg-navy-900/15" />
-        <div className="absolute inset-0 bg-linear-to-r from-navy-900/80 via-navy-900/40 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-3/4 bg-linear-to-t from-navy-900 via-navy-900/45 to-transparent lg:h-2/3" />
+        {/* Cools the grey pavement toward the palette. */}
+        <div className="absolute inset-0 bg-navy-900/30 lg:left-2/5" />
+        {/* Header legibility: the transparent header sits on the photo. */}
+        <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-navy-900/80 to-transparent lg:left-2/5 lg:h-44" />
+        {/* From lg: the photo's left edge dissolves into the section navy,
+            and its foot blends into the band. */}
+        <div className="absolute inset-y-0 left-2/5 hidden w-1/4 bg-linear-to-r from-navy-900 via-navy-900/70 to-transparent lg:block" />
+        <div className="absolute inset-x-0 bottom-0 hidden h-1/3 bg-linear-to-t from-navy-900 to-transparent lg:block" />
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
