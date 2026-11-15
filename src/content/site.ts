@@ -130,6 +130,15 @@ export function socialEntries(): { platform: SocialPlatform; href: string }[] {
 }
 
 /**
+ * The profile handle as shown on the site ("@monaama99"), read from the
+ * profile URL so the two can never disagree.
+ */
+export function socialHandle(platform: SocialPlatform): string {
+  const path = new URL(site.social[platform]).pathname;
+  return `@${path.split("/").filter(Boolean)[0] ?? ""}`;
+}
+
+/**
  * Contact is messaging only — WhatsApp and email. There is deliberately no
  * `tel:` link or call option anywhere on the site; the number in
  * `site.whatsappNumber` is used solely to build WhatsApp links.
