@@ -7,8 +7,10 @@ stock imagery remains on the site.
 
 | File | Source frame | Crop | Output | Used by |
 | --- | --- | --- | --- | --- |
-| `coach-mohamed-hero.jpg` | `1.jpeg` | 3:2, cropped so the face sits right of centre | 2400×1600 | Hero background |
-| `coach-mohamed-training.jpg` | `11.jpeg` | 7:5 | 1600×1143 | Meet Coach Mohamed (home + /about) |
+| `coach-mohamed-hero.jpg` | `1.jpeg` | 3:2, face right of centre | 2400×1600 | Hero background, `lg` and up |
+| `coach-mohamed-hero-portrait.jpg` | `1.jpeg` | 4:5, subject centred | 1200×1500 | Hero background below `lg` |
+| `coach-mohamed-training.jpg` | `11.jpeg` | 7:5 | 1600×1143 | Meet Coach Mohamed (homepage) |
+| `coach-mohamed-portrait.jpg` | `9.jpeg` | 7:5 | 1600×1143 | /about |
 
 The raw originals are **not** kept in the repository — they are large phone
 captures and the client holds them. Each file above was cropped, resized with
@@ -37,10 +39,14 @@ No component references an image path directly.
 
 Aspect ratios the layouts expect:
 
-- **Hero** — 3:2, the face right of centre with open space on the left for the
-  headline. The hero renders it `object-cover` under a navy gradient, so the
-  left third is where the text sits.
-- **Meet the coach** — 7:5 landscape.
+- **Hero, wide** — 3:2, face right of centre with open space on the left for
+  the headline. Used from `lg` up.
+- **Hero, portrait** — 4:5, subject centred. Phones render the hero in a tall
+  container, and cropping a wide frame to fill it forces the browser to
+  upscale heavily; a portrait source avoids that. Both are served from one
+  `<picture>`, so only one file downloads.
+- **Meet the coach / about** — 7:5 landscape, one distinct frame each so the
+  two pages do not repeat a photograph.
 
 Strip metadata when you export. Avoid third-party logos and brand marks where
 you can; they need separate clearance.
