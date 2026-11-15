@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -13,7 +12,6 @@ import { TrustBar } from "@/components/sections/trust-bar";
 import { Button } from "@/components/ui/button";
 import { coach } from "@/content/coach";
 import { experience } from "@/content/experience";
-import { media } from "@/content/media";
 import { whyOnline } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -22,8 +20,6 @@ export const metadata: Metadata = {
     "NASM certified coach and professional soccer player. How Mohamed coaches online, and what working with him involves.",
   alternates: { canonical: "/about" },
 };
-
-const shot = media.coachPortrait;
 
 export default function AboutPage() {
   return (
@@ -53,68 +49,50 @@ export default function AboutPage() {
 
         {/* Story, on the warm band — the same treatment the homepage gives
             the coach section. */}
+        {/* Text only. The heading and story share a two-column grid at lg so
+            the measure stays readable, and the facts run full width beneath —
+            no empty column where the photograph used to be. */}
         <Section tone="warm">
-          <div className="grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
-            <Reveal variant="scale" className="relative">
-              <div
-                aria-hidden
-                className="absolute -top-4 -left-4 hidden h-full w-full rounded-xl border border-tan-500/40 sm:block"
-              />
-              <div className="relative aspect-[7/5] w-full overflow-hidden rounded-xl">
-                <Image
-                  src={shot.src}
-                  alt={shot.alt}
-                  fill
-                  sizes="(min-width: 1024px) 44vw, 100vw"
-                  className="object-cover saturate-[0.9]"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-navy-800 opacity-25 mix-blend-color"
-                />
-              </div>
-            </Reveal>
+          <div className="grid gap-x-16 gap-y-8 lg:grid-cols-[0.85fr_1.15fr]">
+            <SectionHeading
+              eyebrow={coach.eyebrow}
+              title="Coaching from both sides of the work."
+              className="lg:sticky lg:top-28 lg:self-start"
+            />
 
             <div className="flex flex-col gap-6">
-              <SectionHeading
-                eyebrow={coach.eyebrow}
-                title="Coaching from both sides of the work."
-              />
+              {coach.bio.map((paragraph, i) => (
+                <Reveal key={paragraph.slice(0, 24)} delay={120 + i * 70}>
+                  <p className="t-lede max-w-[60ch] text-ink-muted">
+                    {paragraph}
+                  </p>
+                </Reveal>
+              ))}
 
-              <div className="flex flex-col gap-4">
-                {coach.bio.map((paragraph, i) => (
-                  <Reveal key={paragraph.slice(0, 24)} delay={160 + i * 70}>
-                    <p className="t-lede max-w-[56ch] text-ink-muted">
-                      {paragraph}
-                    </p>
-                  </Reveal>
-                ))}
-              </div>
-
-              <Reveal delay={300}>
+              <Reveal delay={280}>
                 <p className="border-l-2 border-tan-500 pl-5 text-ink">
                   {whyOnline}
                 </p>
               </Reveal>
-
-              <Reveal delay={360} className="pt-2">
-                <dl className="grid grid-cols-2 gap-x-6 gap-y-6 border-t border-tan-500/30 pt-7 sm:grid-cols-4">
-                  {coach.facts.map((fact) => (
-                    <div key={fact.label} className="flex flex-col gap-1.5">
-                      <dt className="t-eyebrow text-ink-muted">{fact.label}</dt>
-                      <dd
-                        data-numeric
-                        className="font-display text-lg leading-tight text-ink"
-                        style={{ fontVariationSettings: '"wdth" 108, "wght" 660' }}
-                      >
-                        {fact.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </Reveal>
             </div>
           </div>
+
+          <Reveal delay={340}>
+            <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-tan-500/30 pt-8 sm:grid-cols-4 lg:mt-16">
+              {coach.facts.map((fact) => (
+                <div key={fact.label} className="flex flex-col gap-1.5">
+                  <dt className="t-eyebrow text-ink-muted">{fact.label}</dt>
+                  <dd
+                    data-numeric
+                    className="font-display text-xl leading-tight text-ink"
+                    style={{ fontVariationSettings: '"wdth" 108, "wght" 660' }}
+                  >
+                    {fact.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </Section>
 
         <Section tone="base">
