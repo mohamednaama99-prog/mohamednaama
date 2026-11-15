@@ -46,6 +46,12 @@ export const faq: FaqItem[] = [
       "Payment is arranged directly with Mohamed once you have agreed which plan suits you. This site does not take payments.",
   },
   {
+    id: "refunds",
+    question: "Can I cancel or get a refund?",
+    answer:
+      "Yes. If you are not satisfied, you can request a full refund of your first payment within 7 days of making it. After that, you can cancel at any time by messaging Mohamed before your next payment is due — you will not be charged again, and coaching continues until the end of the period you have already paid for. The Refunds & Cancellation page has the full policy.",
+  },
+  {
     id: "equipment",
     question: "Do I need a gym membership?",
     answer:

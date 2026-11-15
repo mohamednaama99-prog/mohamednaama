@@ -1,10 +1,13 @@
+import { site, whatsappDisplayNumber } from "@/content/site";
+
 /**
  * Legal and policy copy.
  *
  * Written from what the site verifiably does — the fields the form collects,
- * where they go, and how enrolment works. No business address, legal entity,
- * tax detail, jurisdiction, refund window or percentage is stated, because
- * none of those were supplied and none may be invented.
+ * where they go, and how enrollment works — plus the refund terms the client
+ * supplied. No business address, legal entity, tax detail, state or governing
+ * law is stated, because none of those were supplied and none may be
+ * invented.
  *
  * INTERNAL: these documents have NOT been reviewed by a lawyer. The gaps the
  * client still has to fill are listed in docs/03-legal-pages.md. That note is
@@ -22,12 +25,10 @@ export type LegalDocument = {
   sections: LegalSection[];
 };
 
-const LAST_UPDATED = "3 November 2026";
-
 export const privacy: LegalDocument = {
   slug: "privacy",
   title: "Privacy Policy",
-  lastUpdated: LAST_UPDATED,
+  lastUpdated: "November 16, 2026",
   intro:
     "This policy explains what this website collects, why, and what happens to it. It covers the website only — anything you later share directly with Mohamed over WhatsApp is part of your coaching relationship with him.",
   sections: [
@@ -61,7 +62,7 @@ export const privacy: LegalDocument = {
     {
       heading: "Your choices",
       body: [
-        "You can ask what is held about you, ask for it to be corrected, or ask for it to be deleted. Message Mohamed on WhatsApp using the number on the contact page and say what you would like done.",
+        "You can ask what is held about you, ask for it to be corrected, or ask for it to be deleted. Email Mohamed or message him on WhatsApp — both are on the contact page — and say what you would like done.",
       ],
     },
     {
@@ -82,9 +83,9 @@ export const privacy: LegalDocument = {
 export const terms: LegalDocument = {
   slug: "terms",
   title: "Terms & Conditions",
-  lastUpdated: LAST_UPDATED,
+  lastUpdated: "November 16, 2026",
   intro:
-    "These terms cover the use of this website and the online coaching offered through it. The specific terms of your own coaching agreement are confirmed directly with Mohamed before you start.",
+    "These terms cover the use of this website and the online coaching offered through it. The plan, price and payment arrangement for your coaching are confirmed directly with Mohamed before you start; cancellation and refunds follow the Refunds & Cancellation policy.",
   sections: [
     {
       heading: "What this website is",
@@ -104,6 +105,13 @@ export const terms: LegalDocument = {
       body: [
         "Coaching is offered as Weekly Coaching or Daily Coaching, each over a three-month or six-month term. The difference between them is how often you and Mohamed are in contact; the programme, nutrition recommendations and technique review are part of both.",
         "Prices shown on this site are the current rates for those plans and are stated per week alongside the total for the full term.",
+      ],
+    },
+    {
+      heading: "Cancellation and refunds",
+      body: [
+        "Your first payment is covered by a 7-day guarantee: if you are not satisfied, you can request a full refund within 7 days of making it. After that, payments for a coaching period that has already started are non-refundable.",
+        "You can cancel at any time by messaging Mohamed before your next payment is due, and your coaching continues until the end of the period you have already paid for. The full terms, including pausing for injury or illness, are set out in the Refunds & Cancellation policy.",
       ],
     },
     {
@@ -127,7 +135,7 @@ export const terms: LegalDocument = {
       ],
     },
     {
-      heading: "Your account of the service",
+      heading: "Coaching materials",
       body: [
         "Programmes, written plans and materials provided during coaching are for your own use. Please do not resell or redistribute them.",
       ],
@@ -141,42 +149,79 @@ export const terms: LegalDocument = {
   ],
 };
 
+/**
+ * How to reach Mohamed with a refund or cancellation request, built from the
+ * values in `site` so the policy can never show a stale address or number.
+ */
+function requestChannels() {
+  const number = whatsappDisplayNumber();
+  const channels = [
+    site.email ? `email Mohamed at ${site.email}` : null,
+    number ? `send him a WhatsApp message at ${number}` : null,
+  ].filter(Boolean);
+  const how = channels.length
+    ? channels.join(" or ")
+    : "contact Mohamed through the contact page";
+  return `To request a refund or to cancel, ${how}. Include your name and the plan you are on.`;
+}
+
+/**
+ * CONFIRMED by client: the terms below. Billing is described only as "your
+ * first payment" and "your next payment" — the payment arrangement itself is
+ * agreed with Mohamed (see `terms`), so no cadence is stated here.
+ */
 export const refunds: LegalDocument = {
   slug: "refunds",
   title: "Refunds & Cancellation",
-  lastUpdated: LAST_UPDATED,
+  lastUpdated: "November 16, 2026",
   intro:
-    "How cancellation and refunds are handled for online coaching. Because there is no checkout on this site, these arrangements are confirmed with Mohamed directly before coaching begins.",
+    "How refunds and cancellation work for online coaching with Mohamed. There is no checkout on this site: payment is arranged directly with Mohamed once you have agreed on a plan, and this policy applies from your first payment.",
   sections: [
     {
-      heading: "Before coaching starts",
+      heading: "7-day guarantee",
       body: [
-        "Submitting the application form does not commit you to anything and costs nothing. If you decide not to go ahead after speaking with Mohamed, simply say so — there is nothing to cancel.",
+        "If you are not satisfied with your coaching, you can request a full refund of your first payment within 7 days of making it.",
       ],
     },
     {
-      heading: "Coaching terms run for a fixed period",
+      heading: "After the first 7 days",
       body: [
-        "Both plans are sold as a full term — three months or six months. The term, its price and the payment arrangement are agreed with Mohamed before coaching begins, and that agreement is what governs cancellation and any refund.",
+        "Once those 7 days have passed, payments for a coaching period that has already started are non-refundable. Your program is built for you individually, and Mohamed's time for that period is already committed to you.",
       ],
     },
     {
-      heading: "Asking to cancel",
+      heading: "Cancel any time",
       body: [
-        "If you need to stop coaching partway through a term, contact Mohamed as early as you can and explain the circumstances. Requests are handled individually, and the outcome depends on what the two of you agreed at enrolment.",
+        "You can cancel at any time by messaging Mohamed before your next payment is due. You will not be charged again, and your coaching continues until the end of the period you have already paid for.",
       ],
     },
     {
-      heading: "Pausing instead of cancelling",
+      heading: "What is not refunded",
       body: [
-        "Injury, illness and travel are a normal part of a long training block, and they are usually better handled by adjusting or pausing the programme than by ending it. Raise it at your next check-in.",
+        "Refunds are not given for missed check-ins, unused coaching time, or not following the program.",
+      ],
+    },
+    {
+      heading: "Injury, illness or an emergency",
+      body: [
+        "If an injury, an illness or an emergency stops you from training, your coaching can be paused by arrangement with Mohamed, so you do not lose the time you have paid for.",
+      ],
+    },
+    {
+      heading: "If Mohamed ends the coaching",
+      body: [
+        "If Mohamed ends the coaching relationship, any time you have paid for but not yet used is refunded.",
+      ],
+    },
+    {
+      heading: "How refunds are paid",
+      body: [
+        "Approved refunds go back to your original payment method within 5–10 business days.",
       ],
     },
     {
       heading: "How to make a request",
-      body: [
-        "Send your cancellation or refund request to Mohamed through any of the methods on the contact page, with your name and the plan you are on.",
-      ],
+      body: [requestChannels()],
     },
   ],
 };
