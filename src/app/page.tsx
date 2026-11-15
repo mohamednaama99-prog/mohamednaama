@@ -9,6 +9,7 @@ import { FinalCta } from "@/components/sections/final-cta";
 import { Hero } from "@/components/sections/hero";
 import { Pricing } from "@/components/sections/pricing";
 import { TrustBar } from "@/components/sections/trust-bar";
+import { homepageJsonLd } from "@/lib/jsonld";
 
 /**
  * Landing page — the approved ten-section structure.
@@ -22,6 +23,13 @@ import { TrustBar } from "@/components/sections/trust-bar";
 export default function Home() {
   return (
     <>
+      {/* Structured data, built only from src/content — see lib/jsonld.ts for
+          what is deliberately omitted. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageJsonLd()) }}
+      />
+
       <SiteHeader />
 
       <main id="main" className="flex-1">
