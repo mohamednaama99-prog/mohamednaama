@@ -1,37 +1,46 @@
 # Image assets
 
-Every file prefixed `temp-` is **temporary stock photography** standing in until
-Coach Mohamed supplies his own. None of it depicts Mohamed Naama, and no alt
-text claims that it does.
+All photography here is **Mohamed Naama's own**, supplied by the client. No
+stock imagery remains on the site.
 
-## Current temporary assets
+## Current assets
 
-| File | Source | Photographer | License | Used by |
+| File | Source frame | Crop | Output | Used by |
 | --- | --- | --- | --- | --- |
-| `temp-hero-portrait.jpg` | [Unsplash `SzHsiYO6pZE`](https://unsplash.com/photos/grayscale-photo-of-man-wearing-nike-shirt-SzHsiYO6pZE) | Dani (@frokz) | Unsplash License (free) | Hero |
-| `temp-coaching-session.jpg` | [Unsplash `bPd5bBHLdco`](https://unsplash.com/photos/a-man-holding-a-barbell-in-a-gym-bPd5bBHLdco) | Crosby Hinze | Unsplash License (free) | Meet Coach Mohamed |
+| `coach-mohamed-hero.jpg` | `1.jpeg` | 3:2, cropped so the face sits right of centre | 2400×1600 | Hero background |
+| `coach-mohamed-training.jpg` | `11.jpeg` | 7:5 | 1600×1143 | Meet Coach Mohamed (home + /about) |
 
-## Replacing them with real photography
+The raw originals are **not** kept in the repository — they are large phone
+captures and the client holds them. Each file above was cropped, resized with
+Lanczos, re-encoded as progressive JPEG, and written from pixel data only, so
+**no EXIF travels with them** (no camera model, no timestamp, no GPS).
 
-All image paths and dimensions live in one file: **`src/content/media.ts`**.
+Verify at any time:
+
+```bash
+python -c "from PIL import Image; print(Image.open('public/images/coach-mohamed-hero.jpg').getexif())"
+```
+
+An empty result means the metadata is gone.
+
+## Replacing a photo
+
+All paths, dimensions and alt text live in one file: **`src/content/media.ts`**.
 No component references an image path directly.
 
-1. Drop the new file into `public/images/` (e.g. `coach-portrait.jpg`).
-2. Update that entry in `src/content/media.ts` — `src`, `width`, `height`, `alt`,
-   and set `temporary: false`.
-3. Delete the `temp-` file.
+1. Drop the new file into `public/images/`.
+2. Update that entry in `src/content/media.ts` — `src`, `width`, `height`, and
+   `alt` rewritten to describe what the new picture actually shows.
+3. Delete the old file.
 
-Nothing else needs to change. `temporary: true` is what drives the internal
-"temporary asset" badge shown during development.
+## Re-cropping from new originals
 
-## What to brief the photographer
+Aspect ratios the layouts expect:
 
-- **Hero:** a vertical portrait, roughly 5:7, of Mohamed in training kit, shot
-  head-and-shoulders with the face clearly lit. The site renders it as a navy
-  duotone, so an evenly lit, low-colour frame works best — a desaturated or
-  black-and-white original is ideal. The left and bottom edges dissolve into
-  navy, so leave space around the head.
-- **Meet the coach:** a landscape coaching moment, roughly 7:5 — Mohamed working
-  with a client rather than posing.
-- Avoid third-party logos and brand marks on clothing or walls; they have to be
-  cleared separately and they fight the palette.
+- **Hero** — 3:2, the face right of centre with open space on the left for the
+  headline. The hero renders it `object-cover` under a navy gradient, so the
+  left third is where the text sits.
+- **Meet the coach** — 7:5 landscape.
+
+Strip metadata when you export. Avoid third-party logos and brand marks where
+you can; they need separate clearance.

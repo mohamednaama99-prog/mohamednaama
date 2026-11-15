@@ -30,8 +30,8 @@ export const experience = {
       id: "expert-guidance",
       index: "02",
       title: "Expert guidance",
-      summary: "A NASM certified coach and professional soccer player reviewing what you actually do.",
-      points: ["Technique reviewed from video", "Specific corrections", "Nutrition targets alongside training"],
+      summary: "A NASM certified coach and professional soccer player reviewing what you actually do. Practical nutrition recommendations to support your training — not a full meal plan.",
+      points: ["Technique reviewed from video", "Specific corrections", "Nutrition recommendations, not a meal plan"],
     },
     {
       id: "progress-tracking",

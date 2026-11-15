@@ -25,7 +25,7 @@ export const faq: FaqItem[] = [
     id: "daily-vs-weekly",
     question: "What is the difference between Daily and Weekly Coaching?",
     answer:
-      "The rhythm of contact. Weekly Coaching reviews your training once a week. Daily Coaching keeps contact on every training day, so adjustments happen session by session rather than at the end of the week. Both include a programme built for you, nutrition guidance and technique review.",
+      "The rhythm of contact. Weekly Coaching reviews your training once a week. Daily Coaching keeps contact on every training day, so adjustments happen session by session rather than at the end of the week. Both include a programme built for you, nutrition recommendations and technique review.",
   },
   {
     id: "term-length",
@@ -63,7 +63,7 @@ export const faq: FaqItem[] = [
     id: "nutrition",
     question: "Is nutrition included?",
     answer:
-      "Nutrition guidance and targets are part of both plans, set alongside your training rather than handled as a separate diet.",
+      "Both plans include practical nutrition recommendations to support your training — this is not a full meal plan. You get guidance on how to eat around your sessions and your goal, not a prescribed day-by-day menu.",
     needsClientAnswer: true,
   },
 ];

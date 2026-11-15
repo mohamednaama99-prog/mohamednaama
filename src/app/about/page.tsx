@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { coach } from "@/content/coach";
 import { experience } from "@/content/experience";
 import { media } from "@/content/media";
+import { whyOnline } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "About Mohamed Naama",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const shot = media.coachingSession;
+const shot = media.coachTraining;
 
 export default function AboutPage() {
   return (
@@ -90,7 +91,13 @@ export default function AboutPage() {
                 ))}
               </div>
 
-              <Reveal delay={320} className="pt-2">
+              <Reveal delay={300}>
+                <p className="border-l-2 border-tan-500 pl-5 text-ink">
+                  {whyOnline}
+                </p>
+              </Reveal>
+
+              <Reveal delay={360} className="pt-2">
                 <dl className="grid grid-cols-2 gap-x-6 gap-y-6 border-t border-tan-500/30 pt-7 sm:grid-cols-4">
                   {coach.facts.map((fact) => (
                     <div key={fact.label} className="flex flex-col gap-1.5">

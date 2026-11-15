@@ -5,7 +5,7 @@ import { Eyebrow, Section } from "@/components/primitives/section";
 import { coach } from "@/content/coach";
 import { media } from "@/content/media";
 
-const shot = media.coachingSession;
+const shot = media.coachTraining;
 
 export function AboutCoach() {
   return (

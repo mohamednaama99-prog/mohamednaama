@@ -10,21 +10,50 @@ import { cn } from "@/lib/utils";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
-const portrait = media.heroPortrait;
+const background = media.heroBackground;
 
 export function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate flex flex-col overflow-hidden bg-surface-deep text-ink-ondeep"
+      className="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-surface-deep pt-28 pb-14 text-ink-ondeep sm:pt-32 lg:min-h-[92svh] lg:items-center lg:pb-20"
     >
-      {/* Atmosphere: two very slow drifting washes behind everything.
-          Barely perceptible by design — the movement should register, not perform. */}
+      {/*
+        Full-bleed photograph.
+
+        `fill` with an explicit `sizes` of 100vw and no intrinsic box means no
+        layout shift: the section's own min-height reserves the space before
+        the image arrives, and the navy background shows through until it does.
+        This is the LCP element, hence `priority`.
+
+        object-position keeps the face at 58% across / 30% down, which holds it
+        clear of the text and inside the frame whether the container crops the
+        sides (portrait phones) or the top and bottom (wide desktops).
+      */}
+      <Image
+        src={background.src}
+        alt={background.alt}
+        fill
+        priority
+        sizes="100vw"
+        className="-z-10 object-cover object-[58%_30%]"
+      />
+
+      {/*
+        Navy veil, measured rather than guessed. Against the brightest part of
+        this photograph the stack lands at roughly 12:1 behind the headline on
+        desktop and 6.6:1 at the midpoint where phone text sits — both past the
+        4.5:1 AA threshold for body copy, with the bottom gradient adding more
+        where the mobile layout places the text.
+      */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="anim-drift absolute -top-1/3 -left-1/4 h-[80vh] w-[80vh] rounded-full bg-navy-700/45 blur-[120px]" />
-        <div className="anim-drift-slow absolute right-1/4 bottom-[-35%] h-[60vh] w-[60vh] rounded-full bg-tan-500/12 blur-[130px]" />
+        {/* Heavier base veil below lg, where the text crosses the brightest
+            part of the frame instead of sitting beside it. */}
+        <div className="absolute inset-0 bg-navy-900/45 lg:bg-navy-900/30" />
+        <div className="absolute inset-0 bg-linear-to-r from-navy-900/85 via-navy-900/55 to-navy-900/10" />
+        <div className="absolute inset-x-0 bottom-0 h-full bg-linear-to-t from-navy-900 via-navy-900/55 to-transparent lg:h-2/3" />
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
               "repeating-linear-gradient(115deg, #fff 0 1px, transparent 1px 96px)",
@@ -33,9 +62,9 @@ export function Hero() {
       </div>
 
       <div className="container-wide relative z-10">
-        <div className="flex flex-col gap-7 pt-28 pb-12 sm:pt-32 lg:min-h-[92svh] lg:w-[54%] lg:justify-center lg:gap-8 lg:py-32 lg:pr-12">
+        <div className="flex max-w-[34rem] flex-col gap-7 lg:max-w-[42rem] lg:gap-8">
           <p
-            className="anim-in t-eyebrow flex items-center gap-3 text-ink-ondeep-muted"
+            className="anim-in t-eyebrow flex items-center gap-3 text-mist-100/75"
             style={d(60)}
           >
             <span aria-hidden className="h-px w-8 bg-tan-500" />
@@ -56,7 +85,7 @@ export function Hero() {
           </h1>
 
           <p
-            className="anim-in t-lede max-w-[46ch] text-ink-ondeep-muted"
+            className="anim-in t-lede max-w-[46ch] text-mist-100/85"
             style={d(420)}
           >
             {hero.lede}
@@ -79,7 +108,7 @@ export function Hero() {
           </div>
 
           <ul
-            className="anim-in flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-ink-ondeep-muted"
+            className="anim-in flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-mist-100/75"
             style={d(600)}
           >
             {credentials.map((credential) => (
@@ -90,63 +119,6 @@ export function Hero() {
             ))}
           </ul>
         </div>
-      </div>
-
-      {/*
-        The portrait.
-
-        One element, positioned two ways: in flow beneath the content on
-        phones, and anchored to the right edge of the section from `lg` up.
-        Rendering it once keeps a single image download — a second hidden
-        <Image> would be fetched too.
-
-        It is blended into the composition rather than framed: a navy tint
-        pulls the photograph into the palette, and gradients dissolve its
-        left and bottom edges into the section so there is no card and no
-        visible boundary.
-      */}
-      <div
-        className="anim-media relative h-[46vh] min-h-[300px] w-full lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:min-h-0 lg:w-[44%]"
-        style={d(240)}
-      >
-        <Image
-          src={portrait.src}
-          alt={portrait.alt}
-          fill
-          priority
-          sizes="(min-width: 1024px) 44vw, 100vw"
-          className="object-cover object-[center_26%] grayscale brightness-[1.28] contrast-[1.12] lg:object-[center_30%]"
-        />
-
-        {/* Duotone. Multiplying navy over a desaturated frame drops the
-            highlights to the brand navy and the shadows to near-black; a thin
-            tan screen puts warmth back into the midtones. The photograph ends
-            up built from the palette rather than merely sitting on it. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-navy-800 opacity-[0.62] mix-blend-multiply"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-tan-500 opacity-[0.18] mix-blend-screen"
-        />
-
-        {/* Edge dissolves. Vertical on phones, horizontal on desktop. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-linear-to-b from-navy-900 via-transparent to-navy-900 lg:bg-linear-to-r lg:from-navy-900 lg:via-transparent lg:to-transparent"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-navy-900 to-transparent"
-        />
-
-        {/* A single tan hairline where the image meets the text column. */}
-        <div
-          aria-hidden
-          className="absolute inset-y-0 left-0 hidden w-px bg-linear-to-b from-transparent via-tan-500/45 to-transparent lg:block"
-        />
-
       </div>
     </section>
   );

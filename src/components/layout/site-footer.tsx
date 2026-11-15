@@ -8,7 +8,6 @@ import {
   credentials,
   legalNav,
   nav,
-  phoneNumber,
   site,
   whatsappLink,
 } from "@/content/site";
@@ -34,7 +33,6 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 
 export async function SiteFooter() {
   const whatsapp = whatsappLink();
-  const phone = phoneNumber();
   const year = await currentYear();
 
   return (
@@ -89,18 +87,6 @@ export async function SiteFooter() {
                   >
                     <WhatsAppIcon className="size-4" />
                     WhatsApp
-                  </a>
-                </li>
-              ) : null}
-
-              {phone ? (
-                <li>
-                  <a
-                    href={phone.tel}
-                    data-numeric
-                    className="cursor-pointer text-sm text-mist-100/85 transition-colors hover:text-tan-500"
-                  >
-                    {phone.display}
                   </a>
                 </li>
               ) : null}
