@@ -13,11 +13,11 @@ import { Button } from "@/components/ui/button";
 import { coach } from "@/content/coach";
 import { experience } from "@/content/experience";
 import { whyOnline } from "@/content/site";
+import { seo } from "@/content/seo";
 
 export const metadata: Metadata = {
-  title: "About Mohamed Naama",
-  description:
-    "NASM certified coach and professional soccer player. How Mohamed coaches online, and what working with him involves.",
+  title: seo.about.title,
+  description: seo.about.description,
   alternates: { canonical: "/about" },
 };
 

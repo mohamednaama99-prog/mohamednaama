@@ -24,7 +24,7 @@ export const coach = {
   heading: "A professional athlete's standards, applied to your week.",
 
   bio: [
-    "Mohamed Naama is a NASM certified coach and a professional soccer player — someone who has spent his career on both sides of the work, following a programme himself and writing them for other people.",
+    "Mohamed Naama is a NASM certified coach and a professional soccer player — someone who has spent his career on both sides of the work, following a program himself and writing them for other people.",
     "Across more than 4,000 in-person sessions and over 300 clients coached face to face, that experience shapes how he coaches online: a plan you can actually hold to, reviewed often enough to stay honest, and adjusted when your week does not go to plan.",
   ],
 

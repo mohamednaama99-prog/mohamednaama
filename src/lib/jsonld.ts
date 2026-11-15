@@ -53,8 +53,10 @@ export function homepageJsonLd() {
     name: "Online fitness coaching",
     serviceType: "Online personal training",
     provider: { "@id": personId },
+    /* The audience is the United States; prices are in US dollars. */
+    areaServed: "US",
     description:
-      "Daily and weekly online coaching: a training programme written for you, nutrition recommendations, technique review from video, and check-ins on a set rhythm.",
+      "Daily and weekly online coaching: a training program written for you, nutrition recommendations, technique review from video, and check-ins on a set rhythm.",
     offers,
   };
 

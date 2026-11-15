@@ -12,11 +12,11 @@ import { Reveal } from "@/components/primitives/reveal";
 import { Section, SectionHeading } from "@/components/primitives/section";
 import { Button } from "@/components/ui/button";
 import { site, whatsappDisplayNumber, whatsappLink } from "@/content/site";
+import { seo } from "@/content/seo";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Get in touch with Coach Mohamed Naama on WhatsApp or by phone.",
+  title: seo.contact.title,
+  description: seo.contact.description,
   alternates: { canonical: "/contact" },
 };
 

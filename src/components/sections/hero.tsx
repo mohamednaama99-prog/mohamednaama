@@ -103,7 +103,7 @@ export function Hero() {
         public/images/README.md.
       */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        {/* Cools the grey pavement toward the palette. */}
+        {/* Cools the gray pavement toward the palette. */}
         <div className="absolute inset-0 bg-navy-900/30 lg:left-2/5" />
         {/* Header legibility: the transparent header sits on the photo. */}
         <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-navy-900/80 to-transparent lg:left-2/5 lg:h-44" />

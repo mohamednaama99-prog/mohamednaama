@@ -42,12 +42,12 @@ const dailyFeatures = [
   "Training program built for your schedule",
   "Nutrition recommendations",
   "Technique review on submitted videos",
-  "Programme adjusted as your week changes",
+  "Program adjusted as your week changes",
   "Direct WhatsApp access",
 ];
 
 const weeklyFeatures = [
-  "Weekly check-in and programme review",
+  "Weekly check-in and program review",
   "Training program built for your schedule",
   "Nutrition recommendations",
   "Technique review on submitted videos",
@@ -168,11 +168,11 @@ export type ComparisonRow = {
 };
 
 export const comparison: ComparisonRow[] = [
-  { feature: "Programme written for you", weekly: true, daily: true },
+  { feature: "Program written for you", weekly: true, daily: true },
   { feature: "Check-ins", weekly: "Once a week", daily: "Every training day" },
   { feature: "Questions during the day", weekly: "Answered at your weekly check-in", daily: "Priority replies" },
   { feature: "Performance follow-ups", weekly: "Weekly", daily: "More frequent" },
-  { feature: "Programme adjustments", weekly: "Weekly review", daily: "Session by session" },
+  { feature: "Program adjustments", weekly: "Weekly review", daily: "Session by session" },
   { feature: "Technique review on video", weekly: true, daily: true },
   { feature: "Nutrition recommendations", weekly: true, daily: true },
   { feature: "Direct WhatsApp access", weekly: true, daily: true },

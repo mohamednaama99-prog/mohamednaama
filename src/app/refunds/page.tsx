@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 
 import { LegalDocumentPage } from "@/components/layout/legal-document";
 import { refunds } from "@/content/legal";
+import { seo } from "@/content/seo";
 
 export const metadata: Metadata = {
-  title: "Refunds & Cancellation",
-  description: "How cancellation and refunds are handled for online coaching.",
+  title: seo.refunds.title,
+  description: seo.refunds.description,
   alternates: { canonical: "/refunds" },
 };
 

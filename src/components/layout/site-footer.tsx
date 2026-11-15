@@ -125,7 +125,7 @@ export async function SiteFooter() {
             </p>
             <p className="max-w-[52ch]">
               Coaching is not medical advice. Consult a qualified professional
-              before beginning any new training or nutrition programme.
+              before beginning any new training or nutrition program.
             </p>
           </div>
         </div>

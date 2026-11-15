@@ -16,7 +16,7 @@ export const experienceIsProvisional = true;
 export const experience = {
   eyebrow: "The coaching experience",
   heading: "What working together looks like.",
-  lede: "A programme written for you, reviewed on a set rhythm, and changed when your week changes.",
+  lede: "A program written for you, reviewed on a set rhythm, and changed when your week changes.",
 
   groups: [
     {

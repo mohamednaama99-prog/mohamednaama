@@ -95,7 +95,7 @@ export const terms: LegalDocument = {
       ],
     },
     {
-      heading: "How enrolment works",
+      heading: "How enrollment works",
       body: [
         "After you apply, Mohamed follows up on WhatsApp. The plan, the term, the price and the payment arrangement are agreed directly with him at that point, and coaching begins once both of you have agreed them.",
       ],
@@ -103,7 +103,7 @@ export const terms: LegalDocument = {
     {
       heading: "The coaching plans",
       body: [
-        "Coaching is offered as Weekly Coaching or Daily Coaching, each over a three-month or six-month term. The difference between them is how often you and Mohamed are in contact; the programme, nutrition recommendations and technique review are part of both.",
+        "Coaching is offered as Weekly Coaching or Daily Coaching, each over a three-month or six-month term. The difference between them is how often you and Mohamed are in contact; the program, nutrition recommendations and technique review are part of both.",
         "Prices shown on this site are the current rates for those plans and are stated per week alongside the total for the full term.",
       ],
     },
@@ -118,13 +118,13 @@ export const terms: LegalDocument = {
       heading: "What is expected of you",
       body: [
         "Coaching depends on the information you give. You are responsible for describing your training history, your injuries and your health honestly, and for telling Mohamed if any of that changes during the term.",
-        "You are responsible for carrying out the programme as written, for logging your sessions, and for replying at check-ins.",
+        "You are responsible for carrying out the program as written, for logging your sessions, and for replying at check-ins.",
       ],
     },
     {
       heading: "Health and safety",
       body: [
-        "Coaching is not medical advice, diagnosis or treatment, and Mohamed is not your doctor. Nutrition support is limited to general recommendations that support your training; it is not a prescribed meal plan and it is not dietetic advice. Consult a qualified medical professional before beginning any new training or nutrition programme, particularly if you have an existing condition, an injury, or are pregnant.",
+        "Coaching is not medical advice, diagnosis or treatment, and Mohamed is not your doctor. Nutrition support is limited to general recommendations that support your training; it is not a prescribed meal plan and it is not dietetic advice. Consult a qualified medical professional before beginning any new training or nutrition program, particularly if you have an existing condition, an injury, or are pregnant.",
         "Training carries a risk of injury. You take part at your own risk and should stop and seek medical attention if something hurts in a way that is not ordinary training discomfort.",
       ],
     },
@@ -137,7 +137,7 @@ export const terms: LegalDocument = {
     {
       heading: "Coaching materials",
       body: [
-        "Programmes, written plans and materials provided during coaching are for your own use. Please do not resell or redistribute them.",
+        "Programs, written plans and materials provided during coaching are for your own use. Please do not resell or redistribute them.",
       ],
     },
     {

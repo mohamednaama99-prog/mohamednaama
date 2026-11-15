@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Geist, Geist_Mono } from "next/font/google";
 
+import { seo, titleSuffix } from "@/content/seo";
 import { site } from "@/content/site";
 
 import "./globals.css";
@@ -29,10 +30,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.role}`,
-    template: `%s | ${site.name}`,
+    default: seo.home.title,
+    template: `%s${titleSuffix}`,
   },
-  description: site.description,
+  description: seo.home.description,
   applicationName: site.name,
   authors: [{ name: site.name }],
   creator: site.name,
@@ -42,13 +43,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: site.url,
     siteName: site.name,
-    title: `${site.name} — ${site.role}`,
-    description: site.description,
+    title: seo.home.title,
+    description: seo.home.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.role}`,
-    description: site.description,
+    title: seo.home.title,
+    description: seo.home.description,
   },
   robots: {
     index: true,
@@ -70,7 +71,7 @@ const revealBoot = `if("IntersectionObserver" in window)document.documentElement
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="en-US"
       /* The boot script below adds `reveal-ready` to <html> before React
          hydrates, which React would otherwise report as a mismatch. */
       suppressHydrationWarning
