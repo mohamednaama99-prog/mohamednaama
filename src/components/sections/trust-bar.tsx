@@ -1,6 +1,6 @@
 import { Reveal } from "@/components/primitives/reveal";
 import { Section } from "@/components/primitives/section";
-import { trustStats } from "@/content/site";
+import { trustStats, whyOnline } from "@/content/site";
 
 /**
  * Trust & Experience — the figures that earn the next ten seconds.
@@ -34,6 +34,12 @@ export function TrustBar() {
           </Reveal>
         ))}
       </dl>
+
+      {/* The reason the coaching moved online, next to the record it was
+          built on. Section typography, not a new block. */}
+      <Reveal delay={360} className="mt-12 border-t border-line pt-8 lg:mt-14">
+        <p className="t-lede max-w-[62ch] text-ink-muted">{whyOnline}</p>
+      </Reveal>
     </Section>
   );
 }

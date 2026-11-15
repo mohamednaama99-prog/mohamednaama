@@ -19,7 +19,7 @@ export const site = {
   role: "Online Fitness & Performance Coach",
 
   description:
-    "Online fitness coaching with Mohamed Naama — NASM certified coach and professional soccer player. Daily and weekly coaching built around your schedule, your goals and your week.",
+    "Online fitness coaching with Mohamed Naama — NASM certified coach and professional soccer player, with 4,000+ in-person sessions and 300+ clients coached face to face. Daily and weekly coaching built around your schedule and your goals.",
 
   /** CONFIRMED by client: +1 347 653 7295 → https://wa.me/13476537295
    *  International format, digits only. Override per-environment with
@@ -40,8 +40,12 @@ export const site = {
     facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL ?? null,
   },
 
-  /** TODO(client): contact email for the footer and form receipts. */
-  email: null as string | null,
+  /**
+   * TODO(client): REPLACE BEFORE LAUNCH. `coach@example.com` is a stand-in
+   * supplied for the handoff, not a working address. Setting it to null hides
+   * the email option everywhere.
+   */
+  email: "coach@example.com" as string | null,
 } as const;
 
 /* Absolute so they work from /apply and the supporting pages, not just the
@@ -70,13 +74,13 @@ export const trustStats = [
     id: "sessions",
     value: "4,000",
     suffix: "+",
-    label: "Coaching sessions delivered",
+    label: "In-person sessions delivered",
   },
   {
     id: "clients",
     value: "300",
     suffix: "+",
-    label: "Clients coached",
+    label: "Clients coached face to face",
   },
   {
     id: "nasm",
@@ -98,13 +102,20 @@ export const trustStats = [
  */
 export const hero = {
   eyebrow: "Online coaching",
-  headline: ["Train with a plan", "that answers", "to your week."],
-  /** The word in `headline` that takes the accent treatment. */
+  headline: ["Proven in person.", "Now coaching you", "anywhere."],
+  /** The line in `headline` that takes the accent treatment. */
   accentLine: 2,
-  lede: "Daily and weekly online coaching for people who want real structure, honest accountability, and a coach who adjusts the plan to the life you actually have.",
+  lede: "4,000+ in-person sessions and 300+ clients of experience, delivered online with a plan built around your goals and a coach who keeps you accountable.",
   primaryCta: { label: "Apply for coaching", href: "/apply" },
   secondaryCta: { label: "See the plans", href: "/#plans" },
 } as const;
+
+/**
+ * Why the coaching moved online. Shown with the track record, so the
+ * in-person experience and the reason for going online read together.
+ */
+export const whyOnline =
+  "After years of coaching clients face to face, we took it online for one reason: to reach more people and help them achieve their goals, wherever they train.";
 
 export const stickyCta = {
   label: "Apply for coaching",
@@ -140,19 +151,19 @@ export function socialEntries(): { platform: SocialPlatform; href: string | null
 }
 
 /**
- * The coach's number, formatted for display and for a tel: link.
- * Derived from the same single source as the WhatsApp link.
+ * Contact is messaging only — WhatsApp and email. There is deliberately no
+ * `tel:` link or call option anywhere on the site; the number in
+ * `site.whatsappNumber` is used solely to build WhatsApp links.
+ *
+ * The coach's number formatted for display, where showing it adds context to
+ * the WhatsApp option. It is never rendered as a dialable link.
  */
-export function phoneNumber() {
+export function whatsappDisplayNumber() {
   const digits = site.whatsappNumber;
   if (!digits || digits.length !== 11 || !digits.startsWith("1")) return null;
 
   const national = digits.slice(1);
-  return {
-    e164: `+${digits}`,
-    display: `+1 (${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`,
-    tel: `tel:+${digits}`,
-  };
+  return `+1 (${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`;
 }
 
 /** Builds a wa.me link, or null when the number has not been supplied yet. */

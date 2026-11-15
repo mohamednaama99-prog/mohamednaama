@@ -25,15 +25,15 @@ export const coach = {
 
   bio: [
     "Mohamed Naama is a NASM certified coach and a professional soccer player — someone who has spent his career on both sides of the work, following a programme himself and writing them for other people.",
-    "Across more than 4,000 coaching sessions and over 300 clients, that experience shapes how he coaches online: a plan you can actually hold to, reviewed often enough to stay honest, and adjusted when your week does not go to plan.",
+    "Across more than 4,000 in-person sessions and over 300 clients coached face to face, that experience shapes how he coaches online: a plan you can actually hold to, reviewed often enough to stay honest, and adjusted when your week does not go to plan.",
   ],
 
   /** CONFIRMED by client — shown as a credential list beside the portrait. */
   facts: [
     { label: "Certification", value: "NASM Certified" },
     { label: "Background", value: "Professional soccer player" },
-    { label: "Sessions delivered", value: "4,000+" },
-    { label: "Clients coached", value: "300+" },
+    { label: "In-person sessions", value: "4,000+" },
+    { label: "Coached face to face", value: "300+" },
   ],
 
   /** TODO(client): Mohamed's own words — why he coaches, who he works best

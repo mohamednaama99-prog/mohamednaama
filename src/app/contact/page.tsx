@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { WhatsAppIcon } from "@/components/icons/whatsapp";
@@ -11,7 +11,7 @@ import { SocialLinks } from "@/components/layout/social-links";
 import { Reveal } from "@/components/primitives/reveal";
 import { Section, SectionHeading } from "@/components/primitives/section";
 import { Button } from "@/components/ui/button";
-import { phoneNumber, site, whatsappLink } from "@/content/site";
+import { site, whatsappDisplayNumber, whatsappLink } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -80,7 +80,7 @@ export default function ContactPage() {
   const whatsapp = whatsappLink(
     "Hi Mohamed, I'd like to ask about your online coaching.",
   );
-  const phone = phoneNumber();
+  const number = whatsappDisplayNumber();
 
   return (
     <>
@@ -90,13 +90,13 @@ export default function ContactPage() {
         <PageHero
           eyebrow="Contact"
           title={["Talk to Mohamed", "directly."]}
-          lede="WhatsApp is the fastest way to reach him. If you would rather set out your training first, the application form gives him the full picture before you speak."
+          lede="Message him on WhatsApp or by email. If you would rather set out your training first, the application form gives him the full picture before you speak."
         />
 
         <Section tone="base">
           <SectionHeading
             eyebrow="Get in touch"
-            title="Two ways to reach him."
+            title="Two ways to message him."
             lede="Both go to Mohamed himself — there is no assistant and no ticket queue."
           />
 
@@ -105,7 +105,7 @@ export default function ContactPage() {
               <ContactCard
                 icon={<WhatsAppIcon className="size-5" />}
                 label="WhatsApp"
-                value={phone ? phone.display : "Message on WhatsApp"}
+                value={number ?? "Message on WhatsApp"}
                 hint="Usually the quickest reply."
                 href={whatsapp}
                 external
@@ -114,19 +114,8 @@ export default function ContactPage() {
               />
             ) : null}
 
-            {phone ? (
-              <ContactCard
-                icon={<Phone aria-hidden className="size-5" />}
-                label="Phone"
-                value={phone.display}
-                hint="Tap to call from a mobile."
-                href={phone.tel}
-                delay={90}
-              />
-            ) : null}
-
-            {/* Rendered only when an address is actually configured in
-                src/content/site.ts. No address is invented here. */}
+            {/* Rendered only when an address is configured in
+                src/content/site.ts. */}
             {site.email ? (
               <ContactCard
                 icon={<Mail aria-hidden className="size-5" />}
@@ -134,7 +123,7 @@ export default function ContactPage() {
                 value={site.email}
                 hint="For anything longer."
                 href={`mailto:${site.email}`}
-                delay={180}
+                delay={90}
               />
             ) : null}
           </div>

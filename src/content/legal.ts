@@ -102,7 +102,7 @@ export const terms: LegalDocument = {
     {
       heading: "The coaching plans",
       body: [
-        "Coaching is offered as Weekly Coaching or Daily Coaching, each over a three-month or six-month term. The difference between them is how often you and Mohamed are in contact; the programme, nutrition guidance and technique review are part of both.",
+        "Coaching is offered as Weekly Coaching or Daily Coaching, each over a three-month or six-month term. The difference between them is how often you and Mohamed are in contact; the programme, nutrition recommendations and technique review are part of both.",
         "Prices shown on this site are the current rates for those plans and are stated per week alongside the total for the full term.",
       ],
     },
@@ -116,7 +116,7 @@ export const terms: LegalDocument = {
     {
       heading: "Health and safety",
       body: [
-        "Coaching is not medical advice, diagnosis or treatment, and Mohamed is not your doctor. Consult a qualified medical professional before beginning any new training or nutrition programme, particularly if you have an existing condition, an injury, or are pregnant.",
+        "Coaching is not medical advice, diagnosis or treatment, and Mohamed is not your doctor. Nutrition support is limited to general recommendations that support your training; it is not a prescribed meal plan and it is not dietetic advice. Consult a qualified medical professional before beginning any new training or nutrition programme, particularly if you have an existing condition, an injury, or are pregnant.",
         "Training carries a risk of injury. You take part at your own risk and should stop and seek medical attention if something hurts in a way that is not ordinary training discomfort.",
       ],
     },
