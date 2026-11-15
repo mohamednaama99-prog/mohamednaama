@@ -27,25 +27,14 @@ export const site = {
    *  whatsappLink() below — never a hardcoded wa.me URL. */
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "13476537295",
 
-  /**
-   * TODO(client): the actual profile URLs.
-   *
-   * These stay null until real profiles are supplied — the footer and mobile
-   * menu render nothing for a null entry rather than linking to a platform
-   * home page. Set them here or through the matching env vars.
-   */
+  /** CONFIRMED by client. Instagram is the only social profile. */
   social: {
-    instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? null,
-    tiktok: process.env.NEXT_PUBLIC_TIKTOK_URL ?? null,
-    facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL ?? null,
+    instagram: "https://www.instagram.com/monaama99",
   },
 
-  /**
-   * TODO(client): REPLACE BEFORE LAUNCH. `coach@example.com` is a stand-in
-   * supplied for the handoff, not a working address. Setting it to null hides
-   * the email option everywhere.
-   */
-  email: "coach@example.com" as string | null,
+  /** CONFIRMED by client. Setting it to null hides the email option
+   *  everywhere, including the structured data. */
+  email: "mohamed.naama99@gmail.com" as string | null,
 } as const;
 
 /* Absolute so they work from /apply and the supporting pages, not just the
@@ -129,24 +118,13 @@ export const legalNav = [
   { label: "Refunds & Cancellation", href: "/refunds" },
 ] as const;
 
-export type SocialPlatform = "instagram" | "tiktok" | "facebook";
+export type SocialPlatform = keyof typeof site.social;
 
-/** Fixed display order, independent of whether a URL exists yet. */
-export const socialPlatforms: SocialPlatform[] = [
-  "instagram",
-  "tiktok",
-  "facebook",
-];
-
-/**
- * Every platform, with its URL when one has been supplied and null when it has
- * not. The icon is shown either way; a null entry renders as a non-interactive
- * placeholder rather than a link to a platform home page.
- */
-export function socialEntries(): { platform: SocialPlatform; href: string | null }[] {
-  return socialPlatforms.map((platform) => ({
+/** Every configured profile, in display order. */
+export function socialEntries(): { platform: SocialPlatform; href: string }[] {
+  return (Object.keys(site.social) as SocialPlatform[]).map((platform) => ({
     platform,
-    href: site.social[platform] ?? null,
+    href: site.social[platform],
   }));
 }
 
