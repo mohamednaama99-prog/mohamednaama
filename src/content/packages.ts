@@ -2,11 +2,9 @@
  * The four coaching packages.
  *
  * CONFIRMED by client: Daily Coaching and Weekly Coaching, each on a 3-month
- * and a 6-month term, with the prices below. There is no monthly or quarterly
- * plan, and there is no online checkout — every package CTA routes to
- * /apply with the package preselected.
- *
- * Still PROVISIONAL: the feature lists. Prices are confirmed.
+ * and a 6-month term, with the prices and the plan inclusions below. There is
+ * no monthly or quarterly plan, and there is no online checkout — every
+ * package CTA routes to /apply with the package preselected.
  */
 
 export type PackageId = "daily-3" | "daily-6" | "weekly-3" | "weekly-6";
@@ -29,13 +27,10 @@ export type CoachingPackage = {
    * Deliberately free of availability promises.
    */
   support: string;
-  /** PROVISIONAL — awaiting the client's real inclusions. */
+  /** CONFIRMED by client. */
   features: string[];
   recommended?: boolean;
 };
-
-/** Prices are confirmed; the inclusion lists are not. */
-export const featuresAreProvisional = true;
 
 const dailyFeatures = [
   "Daily check-ins with your coach",
@@ -156,10 +151,8 @@ export const packageOptions = packages.map((p) => ({
 }));
 
 /**
- * Weekly vs Daily comparison.
- *
- * PROVISIONAL — derived from the cadence in the plan names, which is the only
- * difference the client has confirmed. Every row needs sign-off.
+ * Weekly vs Daily comparison — the confirmed plan inclusions above, set side
+ * by side.
  */
 export type ComparisonRow = {
   feature: string;

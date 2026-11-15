@@ -11,7 +11,8 @@
 const url = process.env.NEXT_PUBLIC_SITE_URL ?? "https://coachmohamednaama.com";
 
 export const site = {
-  /** TODO(client): confirm the production domain. Affects canonical + OG URLs. */
+  /** Production origin, from NEXT_PUBLIC_SITE_URL at deploy time. Drives the
+   *  canonical URLs, the Open Graph URLs and the sitemap. */
   url,
 
   name: "Mohamed Naama",

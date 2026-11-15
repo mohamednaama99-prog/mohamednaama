@@ -56,7 +56,7 @@ export const formFields: FormField[] = [
     label: "Email",
     type: "email",
     required: true,
-    placeholder: "you@example.com",
+    placeholder: "Your email address",
     autoComplete: "email",
     maxLength: 120,
   },

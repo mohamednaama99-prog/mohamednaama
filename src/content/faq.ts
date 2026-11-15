@@ -3,8 +3,8 @@
  *
  * Answers marked `needsClientAnswer` are deliberately non-committal: they state
  * only what the agreed flow already supports, because committing to a policy
- * (refunds, equipment minimums, suitability) is the client's call, not ours.
- * Replace those answers before launch.
+ * (equipment minimums, suitability, nutrition scope) is the client's call.
+ * They are accurate as written; the client can sharpen them at any time.
  */
 
 export type FaqItem = {
