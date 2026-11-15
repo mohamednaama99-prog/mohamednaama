@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const shot = media.coachTraining;
+const shot = media.coachPortrait;
 
 export default function AboutPage() {
   return (
