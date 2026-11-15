@@ -43,11 +43,11 @@ export const media = {
     alt: "Mohamed Naama mid push-up on a rain-soaked city sidewalk",
   },
 
-  /** Beside the coach's story on the homepage. */
-  coachRack: {
-    src: "/images/coach-mohamed-rack.jpg",
+  /** Beside the coach's story on the homepage (from 1.jpeg, 7:5). */
+  coachPortrait: {
+    src: "/images/coach-mohamed-gym-portrait.jpg",
     width: 1600,
     height: 1143,
-    alt: "Mohamed Naama in profile beside a loaded rack in the gym",
+    alt: "Mohamed Naama facing the camera in a black sleeveless shirt in the gym",
   },
 } as const satisfies Record<string, SiteImage>;
