@@ -1,6 +1,12 @@
 "use client";
 
-import { useActionState, useMemo, useState, type FormEvent } from "react";
+import {
+  startTransition,
+  useActionState,
+  useMemo,
+  useState,
+  type FormEvent,
+} from "react";
 import { ArrowRight, Check, TriangleAlert } from "lucide-react";
 
 import { WhatsAppIcon } from "@/components/icons/whatsapp";
@@ -173,13 +179,28 @@ export function ApplicationForm({
   const chosen = packageId === GENERAL_ENQUIRY ? null : getPackage(packageId);
 
   const errors = { ...state.fieldErrors, ...clientErrors };
+  const notStored = state.status === "error" && state.message === "not-stored";
+  const storageWhatsapp = notStored
+    ? whatsappLink(formCopy.error.whatsappMessage)
+    : null;
   const set = (name: string, value: string) =>
     setValues((previous) => ({ ...previous, [name]: value }));
 
-  /* Validate before the request goes out, so mistakes surface immediately.
-     The server runs the same schema again — this is a convenience, not a
-     guarantee. */
+  /*
+   * Submitted programmatically rather than through the form's `action` prop.
+   *
+   * React 19 resets the form once an action settles, and Radix's Select and
+   * Checkbox listen for that native reset event — so on a failed write they
+   * would clear themselves while the plain inputs kept their values, leaving
+   * the visitor with a half-empty form. Calling the action ourselves skips
+   * the reset entirely, so nothing is lost when a submission fails.
+   *
+   * Validation runs here first so mistakes surface without a round trip. The
+   * server runs the same schema again; this is a convenience, not a
+   * guarantee.
+   */
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const raw = {
       packageId,
@@ -190,14 +211,16 @@ export function ApplicationForm({
 
     const parsed = applicationSchema.safeParse(raw);
     if (!parsed.success) {
-      event.preventDefault();
-      setClientErrors(fieldErrorsFrom(parsed.error));
-      const firstError = Object.keys(fieldErrorsFrom(parsed.error))[0];
-      document.getElementById(`field-${firstError}`)?.focus();
+      const fieldErrors = fieldErrorsFrom(parsed.error);
+      setClientErrors(fieldErrors);
+      document.getElementById(`field-${Object.keys(fieldErrors)[0]}`)?.focus();
       return;
     }
 
     setClientErrors({});
+    /* Dispatching the action ourselves means wrapping it in a transition —
+       without one `pending` never flips and the button keeps saying "Send". */
+    startTransition(() => formAction(formData));
   }
 
   if (state.status === "success") {
@@ -222,26 +245,35 @@ export function ApplicationForm({
     );
   }
 
-  /* The submission could not be stored, so it is not reported as received. */
-  if (state.status === "error" && state.message === "not-stored") {
-    const whatsapp = whatsappLink(formCopy.error.whatsappMessage);
-    return (
-      <ResultPanel
-        tone="error"
-        icon={<TriangleAlert aria-hidden className="size-5" />}
-        title="That did not go through."
-        body={formCopy.error.notStored}
-        action={
-          whatsapp
-            ? { href: whatsapp, label: formCopy.error.whatsappLabel }
-            : undefined
-        }
-      />
-    );
-  }
-
   return (
-    <form action={formAction} onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
+      {/* A failed write keeps the form mounted and filled: every field is
+          controlled, so nothing the visitor typed is lost and they can retry
+          or fall back to WhatsApp without starting again. */}
+      {notStored ? (
+        <div
+          role="alert"
+          className="flex flex-col items-start gap-4 rounded-xl border border-destructive/30 bg-surface-raised p-5"
+        >
+          <span className="flex items-center gap-2.5 font-display text-base text-ink">
+            <TriangleAlert aria-hidden className="size-5 text-destructive" />
+            That did not go through.
+          </span>
+          <p className="max-w-[52ch] text-sm text-ink-muted">
+            {formCopy.error.notStored} Your answers are still here — you can
+            try again.
+          </p>
+          {storageWhatsapp ? (
+            <Button asChild size="pill" variant="quiet">
+              <a href={storageWhatsapp} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon />
+                {formCopy.error.whatsappLabel}
+              </a>
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+
       {/* Honeypot — off-screen, never announced, never tab-reachable. */}
       <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
         <label htmlFor={HONEYPOT_FIELD}>Company</label>
@@ -403,6 +435,8 @@ export function ApplicationForm({
                     id={id}
                     name={field.name}
                     rows={3}
+                    value={values[field.name] ?? ""}
+                    onChange={(event) => set(field.name, event.target.value)}
                     placeholder={field.placeholder}
                     maxLength={field.maxLength}
                     aria-invalid={Boolean(error)}
@@ -454,6 +488,8 @@ export function ApplicationForm({
                   placeholder={field.placeholder}
                   autoComplete={field.autoComplete}
                   maxLength={field.maxLength}
+                  value={values[field.name] ?? ""}
+                  onChange={(event) => set(field.name, event.target.value)}
                   aria-invalid={Boolean(error)}
                   aria-describedby={describedBy}
                   /* 16px minimum on phones — smaller makes iOS zoom on focus. */
@@ -481,6 +517,10 @@ export function ApplicationForm({
                 <Checkbox
                   id={id}
                   name={field.name}
+                  checked={values[field.name] === "on"}
+                  onCheckedChange={(checked) =>
+                    set(field.name, checked === true ? "on" : "")
+                  }
                   aria-invalid={Boolean(error)}
                   className="mt-0.5 size-5 shrink-0 cursor-pointer border-line-strong data-[state=checked]:border-navy-800 data-[state=checked]:bg-navy-800 data-[state=checked]:text-mist-100"
                 />
