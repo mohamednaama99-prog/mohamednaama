@@ -260,13 +260,13 @@ Implementation does not block on any of these. Each is isolated to one config fi
 | Input | Where it lives | Placeholder behaviour |
 | --- | --- | --- |
 | ~~Package prices~~ | — | **Supplied.** $55/$75 weekly on 3 months, $40/$60 on 6 months, with totals of $660/$900/$960/$1,440 |
-| **Package inclusions** | `src/content/packages.ts` | Provisional feature lists marked `PROVISIONAL` in comments |
-| **Daily vs Weekly differences** | `src/content/packages.ts` | Comparison rows marked provisional |
-| **Coach biography** | `src/content/coach.ts` | **Still outstanding.** `CLAUDE.md` was named as the source twice; it contains one line (`@AGENTS.md`) and no bio. The placeholder restates only the four confirmed facts and invents no career history. `bioIsPlaceholder: true` |
-| **Photography** | `src/content/media.ts` | Temporary Unsplash stock in place, credited in `public/images/README.md`, badged in development, swapped by editing one file |
+| ~~Package inclusions~~ | `src/content/packages.ts` | **Approved** by the client as shown |
+| ~~Daily vs Weekly differences~~ | `src/content/packages.ts` | **Approved** with the inclusions |
+| ~~Coach biography~~ | `src/content/coach.ts` | **Approved** by the client as shown |
+| ~~Photography~~ | `src/content/media.ts` | **Supplied.** The client's own photographs; see `public/images/README.md` |
 | **Google Sheets credentials** | `.env` | Deferred to a final stage by agreement. The integration is built and inert; in production an unconfigured submission is reported as failed, never as received |
 | **Domain** | `src/content/site.ts` | Affects canonical URLs and OG |
-| **Legal pages + health disclaimer** | — | A health disclaimer is not optional for coaching |
+| **Legal review** | `src/content/legal.ts` | Refund terms and contact email are supplied; legal entity, state and governing law are not. See `docs/03-legal-pages.md` |
 | **Final form fields** | `src/content/form.ts` | Provisional field set, flagged in the UI copy |
 
 ---

@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 
 import { LegalDocumentPage } from "@/components/layout/legal-document";
 import { terms } from "@/content/legal";
+import { seo } from "@/content/seo";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions",
-  description: "Terms covering this website and the online coaching offered through it.",
+  title: seo.terms.title,
+  description: seo.terms.description,
   alternates: { canonical: "/terms" },
 };
 

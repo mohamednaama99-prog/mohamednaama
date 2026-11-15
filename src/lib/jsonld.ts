@@ -10,14 +10,15 @@ import { credentials, site } from "@/content/site";
  * and nothing is padded out to satisfy a schema:
  *
  * - no `telephone` — the site offers messaging only, by instruction
- * - no `email` — the configured address is still a placeholder, and
- *   publishing a fake one in machine-readable form is worse than omitting it
- * - no `sameAs` — the social profile URLs have not been supplied
  * - no `address`, `priceRange`, `aggregateRating` or review counts — none of
  *   that was given, and all of it would be fabrication
+ *
+ * `email` and `sameAs` are the client-confirmed address and Instagram
+ * profile from `site`, and drop out if either is removed there.
  */
 export function homepageJsonLd() {
   const personId = `${site.url}/#person`;
+  const sameAs = Object.values(site.social);
 
   const person = {
     "@type": "Person",
@@ -25,8 +26,10 @@ export function homepageJsonLd() {
     name: site.name,
     jobTitle: site.role,
     url: site.url,
-    image: `${site.url}${media.heroWide.src}`,
+    image: `${site.url}${media.coachPortrait.src}`,
     description: site.description,
+    ...(site.email ? { email: site.email } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
     /* Both are client-confirmed. */
     hasCredential: credentials.map((credential) => ({
       "@type": "EducationalOccupationalCredential",
@@ -50,8 +53,10 @@ export function homepageJsonLd() {
     name: "Online fitness coaching",
     serviceType: "Online personal training",
     provider: { "@id": personId },
+    /* The audience is the United States; prices are in US dollars. */
+    areaServed: "US",
     description:
-      "Daily and weekly online coaching: a training programme written for you, nutrition recommendations, technique review from video, and check-ins on a set rhythm.",
+      "Daily and weekly online coaching: a training program written for you, nutrition recommendations, technique review from video, and check-ins on a set rhythm.",
     offers,
   };
 

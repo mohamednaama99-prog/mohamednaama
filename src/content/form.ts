@@ -56,7 +56,7 @@ export const formFields: FormField[] = [
     label: "Email",
     type: "email",
     required: true,
-    placeholder: "you@example.com",
+    placeholder: "Your email address",
     autoComplete: "email",
     maxLength: 120,
   },
@@ -127,7 +127,7 @@ export const formFields: FormField[] = [
     type: "textarea",
     required: false,
     placeholder:
-      "Injuries, deadlines, previous programmes, or the question you wanted to ask.",
+      "Injuries, deadlines, previous programs, or the question you wanted to ask.",
     maxLength: 1200,
     wide: true,
   },

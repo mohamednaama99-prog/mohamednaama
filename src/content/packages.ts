@@ -2,11 +2,9 @@
  * The four coaching packages.
  *
  * CONFIRMED by client: Daily Coaching and Weekly Coaching, each on a 3-month
- * and a 6-month term, with the prices below. There is no monthly or quarterly
- * plan, and there is no online checkout — every package CTA routes to
- * /apply with the package preselected.
- *
- * Still PROVISIONAL: the feature lists. Prices are confirmed.
+ * and a 6-month term, with the prices and the plan inclusions below. There is
+ * no monthly or quarterly plan, and there is no online checkout — every
+ * package CTA routes to /apply with the package preselected.
  */
 
 export type PackageId = "daily-3" | "daily-6" | "weekly-3" | "weekly-6";
@@ -29,25 +27,22 @@ export type CoachingPackage = {
    * Deliberately free of availability promises.
    */
   support: string;
-  /** PROVISIONAL — awaiting the client's real inclusions. */
+  /** CONFIRMED by client. */
   features: string[];
   recommended?: boolean;
 };
-
-/** Prices are confirmed; the inclusion lists are not. */
-export const featuresAreProvisional = true;
 
 const dailyFeatures = [
   "Daily check-ins with your coach",
   "Training program built for your schedule",
   "Nutrition recommendations",
   "Technique review on submitted videos",
-  "Programme adjusted as your week changes",
+  "Program adjusted as your week changes",
   "Direct WhatsApp access",
 ];
 
 const weeklyFeatures = [
-  "Weekly check-in and programme review",
+  "Weekly check-in and program review",
   "Training program built for your schedule",
   "Nutrition recommendations",
   "Technique review on submitted videos",
@@ -156,10 +151,8 @@ export const packageOptions = packages.map((p) => ({
 }));
 
 /**
- * Weekly vs Daily comparison.
- *
- * PROVISIONAL — derived from the cadence in the plan names, which is the only
- * difference the client has confirmed. Every row needs sign-off.
+ * Weekly vs Daily comparison — the confirmed plan inclusions above, set side
+ * by side.
  */
 export type ComparisonRow = {
   feature: string;
@@ -168,11 +161,11 @@ export type ComparisonRow = {
 };
 
 export const comparison: ComparisonRow[] = [
-  { feature: "Programme written for you", weekly: true, daily: true },
+  { feature: "Program written for you", weekly: true, daily: true },
   { feature: "Check-ins", weekly: "Once a week", daily: "Every training day" },
   { feature: "Questions during the day", weekly: "Answered at your weekly check-in", daily: "Priority replies" },
   { feature: "Performance follow-ups", weekly: "Weekly", daily: "More frequent" },
-  { feature: "Programme adjustments", weekly: "Weekly review", daily: "Session by session" },
+  { feature: "Program adjustments", weekly: "Weekly review", daily: "Session by session" },
   { feature: "Technique review on video", weekly: true, daily: true },
   { feature: "Nutrition recommendations", weekly: true, daily: true },
   { feature: "Direct WhatsApp access", weekly: true, daily: true },

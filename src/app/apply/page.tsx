@@ -9,11 +9,11 @@ import { Eyebrow } from "@/components/primitives/section";
 import { ApplicationForm } from "@/components/sections/application-form";
 import { formCopy } from "@/content/form";
 import { getPackage } from "@/content/packages";
+import { seo } from "@/content/seo";
 
 export const metadata: Metadata = {
-  title: "Apply for coaching",
-  description:
-    "Apply for online coaching with Mohamed Naama. One short form — pick a plan or just ask a question, and Mohamed continues the conversation on WhatsApp.",
+  title: seo.apply.title,
+  description: seo.apply.description,
   alternates: { canonical: "/apply" },
   /* A form page has nothing to offer search; the landing page carries the SEO. */
   robots: { index: false, follow: true },

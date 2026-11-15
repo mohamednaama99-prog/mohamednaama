@@ -111,7 +111,7 @@ export function Comparison() {
       <SectionHeading
         eyebrow="Weekly vs Daily"
         title="How close do you want the contact?"
-        lede="Both plans include the same programme, nutrition recommendations and technique review. What changes is how often Mohamed is in it with you."
+        lede="Both plans include the same program, nutrition recommendations and technique review. What changes is how often Mohamed is in it with you."
       />
 
       <div className="mt-14 grid gap-5 md:grid-cols-2">
