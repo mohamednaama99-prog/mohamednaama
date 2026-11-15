@@ -31,16 +31,16 @@ const DESKTOP_SIZES = "100vw";
  *   coerced back to 75. Asking for it only made the intent misleading.
  */
 const shared = {
-  alt: media.heroLandscape.alt,
+  alt: media.heroWide.alt,
 };
 
 const {
   props: { srcSet: desktopSrcSet },
 } = getImageProps({
   ...shared,
-  src: media.heroLandscape.src,
-  width: media.heroLandscape.width,
-  height: media.heroLandscape.height,
+  src: media.heroWide.src,
+  width: media.heroWide.width,
+  height: media.heroWide.height,
   sizes: DESKTOP_SIZES,
 });
 
@@ -48,9 +48,9 @@ const {
   props: { srcSet: mobileSrcSet, ...imgProps },
 } = getImageProps({
   ...shared,
-  src: media.heroPortrait.src,
-  width: media.heroPortrait.width,
-  height: media.heroPortrait.height,
+  src: media.heroTall.src,
+  width: media.heroTall.width,
+  height: media.heroTall.height,
   sizes: MOBILE_SIZES,
 });
 
@@ -80,11 +80,11 @@ export function Hero() {
         <source srcSet={mobileSrcSet} sizes={MOBILE_SIZES} />
         <img
           {...imgProps}
-          alt={media.heroLandscape.alt}
+          alt={media.heroWide.alt}
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 -z-10 h-full w-full object-cover object-[50%_30%]"
+          className="absolute inset-0 -z-10 h-full w-full object-cover object-[50%_34%]"
         />
       </picture>
 
@@ -94,11 +94,12 @@ export function Hero() {
         the 4.5:1 AA threshold for body copy.
       */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        {/* Heavier base veil below lg, where the text crosses the brightest
-            part of the frame instead of sitting beside it. */}
-        <div className="absolute inset-0 bg-navy-900/45 lg:bg-navy-900/30" />
-        <div className="absolute inset-0 bg-linear-to-r from-navy-900/85 via-navy-900/55 to-navy-900/10" />
-        <div className="absolute inset-x-0 bottom-0 h-full bg-linear-to-t from-navy-900 via-navy-900/55 to-transparent lg:h-2/3" />
+        {/* Lighter than the previous photograph needed: this frame is
+            already dark and desaturated, so the old veil flattened it to
+            near-black. Measured after re-tuning rather than guessed. */}
+        <div className="absolute inset-0 bg-navy-900/25 lg:bg-navy-900/15" />
+        <div className="absolute inset-0 bg-linear-to-r from-navy-900/80 via-navy-900/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-3/4 bg-linear-to-t from-navy-900 via-navy-900/45 to-transparent lg:h-2/3" />
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{

@@ -7,23 +7,30 @@ stock imagery remains on the site.
 
 | File | Source frame | Crop | Output | Used by |
 | --- | --- | --- | --- | --- |
-| `coach-mohamed-hero.jpg` | `1.jpeg` | 3:2, face right of centre | 2400×1600 | Hero background, `lg` and up |
-| `coach-mohamed-hero-portrait.jpg` | `1.jpeg` | 4:5, subject centred | 1200×1500 | Hero background below `lg` |
-| `coach-mohamed-training.jpg` | `11.jpeg` | 7:5 | 1600×1143 | Meet Coach Mohamed (homepage) |
-| `coach-mohamed-portrait.jpg` | `9.jpeg` | 7:5 | 1600×1143 | /about |
+| `coach-mohamed-hero-wide.jpg` | `17.jpeg` | 16:9 | 976×549 | Hero background, `lg` and up |
+| `coach-mohamed-hero-tall.jpg` | `17.jpeg` | 4:5 | 976×1220 | Hero background below `lg` |
+| `coach-mohamed-rack.jpg` | `7.jpeg` | 7:5 | 1600×1143 | Meet Coach Mohamed (homepage) |
 
-The raw originals are **not** kept in the repository — they are large phone
-captures and the client holds them. Each file above was cropped, resized with
-Lanczos, re-encoded as progressive JPEG, and written from pixel data only, so
-**no EXIF travels with them** (no camera model, no timestamp, no GPS).
+/about is text-only and uses no photograph.
 
-Verify at any time:
+### A note on the hero resolution
 
-```bash
-python -c "from PIL import Image; print(Image.open('public/images/coach-mohamed-hero.jpg').getexif())"
-```
+`17.jpeg` is only 976×2048 — a low-resolution frame. Both hero crops keep that
+native 976px width; the file is never upscaled, because that would add weight
+without adding detail. The browser still has to stretch it on screen:
 
-An empty result means the metadata is gone.
+| Viewport | Rendered | Upscale |
+| --- | --- | --- |
+| 375px, DPR 2 | 572×715 | 1.17× |
+| 375px, DPR 3 | 572×715 | 1.76× |
+| 1440px, DPR 1 | 1440×810 | 1.48× |
+| 1440px, DPR 2 | 1440×810 | 2.95× |
+| 1920px, DPR 1 | 1920×1080 | 1.97× |
+
+It holds up because the photograph is dark, soft-focus and rain-blurred, so
+the softness reads as atmosphere. **A higher-resolution original would remove
+the compromise entirely** — if one exists, re-crop from it and the numbers
+above all drop to 1.0.
 
 ## Replacing a photo
 
@@ -39,14 +46,13 @@ No component references an image path directly.
 
 Aspect ratios the layouts expect:
 
-- **Hero, wide** — 3:2, face right of centre with open space on the left for
-  the headline. Used from `lg` up.
-- **Hero, portrait** — 4:5, subject centred. Phones render the hero in a tall
+- **Hero, wide** — 16:9, subject centred with room on the left for the
+  headline. Used from `lg` up.
+- **Hero, tall** — 4:5, subject centred. Phones render the hero in a tall
   container, and cropping a wide frame to fill it forces the browser to
-  upscale heavily; a portrait source avoids that. Both are served from one
+  upscale heavily; a tall source avoids that. Both are served from one
   `<picture>`, so only one file downloads.
-- **Meet the coach / about** — 7:5 landscape, one distinct frame each so the
-  two pages do not repeat a photograph.
+- **Meet the coach** — 7:5 landscape.
 
 Strip metadata when you export. Avoid third-party logos and brand marks where
 you can; they need separate clearance.

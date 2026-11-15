@@ -25,7 +25,7 @@ export function homepageJsonLd() {
     name: site.name,
     jobTitle: site.role,
     url: site.url,
-    image: `${site.url}${media.heroLandscape.src}`,
+    image: `${site.url}${media.heroWide.src}`,
     description: site.description,
     /* Both are client-confirmed. */
     hasCredential: credentials.map((credential) => ({

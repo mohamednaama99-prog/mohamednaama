@@ -6,8 +6,8 @@
  * what the new picture actually shows. See `public/images/README.md`.
  *
  * These are Mohamed's own photographs, supplied by the client. They were
- * cropped to the aspect ratios below, resized, and saved without EXIF (so no
- * camera or GPS metadata ships with them).
+ * cropped to the aspect ratios below, resized down where needed, and saved
+ * without EXIF (so no camera or GPS metadata ships with them).
  */
 
 export type SiteImage = {
@@ -20,41 +20,32 @@ export type SiteImage = {
 
 export const media = {
   /**
-   * Hero background, art-directed.
+   * Hero background, art-directed: the tall crop below `lg`, the wide crop
+   * from `lg` up, both from the same original and served through one
+   * `<picture>` so only one file downloads.
    *
-   * The landscape crop is only usable from `lg` up. Below that the hero is a
-   * tall container, and `object-cover` on a 3:2 frame renders it about 1072px
-   * wide inside a 375px viewport — so the browser was upscaling a 750px file
-   * nearly 3x. The 4:5 crop exists so phones get a frame shaped like the space
-   * it has to fill. Hero renders both through one `<picture>`, so only one
-   * file is ever downloaded.
+   * Both are capped at the original's 976px width — the source is a
+   * low-resolution frame and upscaling the file would only add weight, not
+   * detail. The screen upscale that remains is recorded in the README.
    */
-  heroLandscape: {
-    src: "/images/coach-mohamed-hero.jpg",
-    width: 2400,
-    height: 1600,
-    alt: "Mohamed Naama on the gym floor where he coaches",
+  heroWide: {
+    src: "/images/coach-mohamed-hero-wide.jpg",
+    width: 976,
+    height: 549,
+    alt: "Mohamed Naama training outdoors in the rain, seen from behind",
   },
-  heroPortrait: {
-    src: "/images/coach-mohamed-hero-portrait.jpg",
-    width: 1200,
-    height: 1500,
-    alt: "Mohamed Naama on the gym floor where he coaches",
-  },
-
-  /** Landscape training shot beside the coach's story on the homepage. */
-  coachTraining: {
-    src: "/images/coach-mohamed-training.jpg",
-    width: 1600,
-    height: 1143,
-    alt: "Mohamed Naama mid-set on a seated dumbbell curl",
+  heroTall: {
+    src: "/images/coach-mohamed-hero-tall.jpg",
+    width: 976,
+    height: 1220,
+    alt: "Mohamed Naama training outdoors in the rain, seen from behind",
   },
 
-  /** Used on /about so the two pages do not repeat the same photograph. */
-  coachPortrait: {
-    src: "/images/coach-mohamed-portrait.jpg",
+  /** Beside the coach's story on the homepage. */
+  coachRack: {
+    src: "/images/coach-mohamed-rack.jpg",
     width: 1600,
     height: 1143,
-    alt: "Mohamed Naama resting between sets, looking off camera",
+    alt: "Mohamed Naama in profile beside a loaded rack in the gym",
   },
 } as const satisfies Record<string, SiteImage>;
