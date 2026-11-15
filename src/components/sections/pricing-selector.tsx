@@ -147,6 +147,10 @@ export function PricingSelector() {
         </div>
       </div>
 
+      <p className="text-center text-xs text-ink-muted">
+        Nutrition recommendations support your training. They are not a full
+        meal plan.
+      </p>
     </div>
   );
 }
