@@ -40,7 +40,7 @@ export const featuresAreProvisional = true;
 const dailyFeatures = [
   "Daily check-ins with your coach",
   "Training program built for your schedule",
-  "Nutrition recommendations, not a meal plan",
+  "Nutrition recommendations",
   "Technique review on submitted videos",
   "Programme adjusted as your week changes",
   "Direct WhatsApp access",
@@ -49,7 +49,7 @@ const dailyFeatures = [
 const weeklyFeatures = [
   "Weekly check-in and programme review",
   "Training program built for your schedule",
-  "Nutrition recommendations, not a meal plan",
+  "Nutrition recommendations",
   "Technique review on submitted videos",
   "Direct WhatsApp access",
 ];

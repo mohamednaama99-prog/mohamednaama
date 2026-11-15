@@ -9,7 +9,7 @@ import { createSign } from "node:crypto";
  *
  * Nothing here invents credentials. Until the client supplies a spreadsheet and
  * a service account, `readConfig()` returns null and submissions are accepted
- * and logged without being written anywhere. See docs/02-google-sheets-setup.md.
+ * and logged without being written anywhere. See docs/google-sheets-setup.md.
  *
  * This module is server-only: it is imported exclusively by a "use server"
  * action, so the private key never reaches the client bundle.

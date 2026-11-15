@@ -278,7 +278,7 @@ Implementation does not block on any of these. Each is isolated to one config fi
 3. ~~**Hero** + page shell and responsive foundations.~~ **Done** (rebuilt as a split composition)
 4. ~~Trust & Experience · Meet Coach Mohamed · The Coaching Experience.~~ **Done**
 5. ~~Pricing · Weekly vs Daily comparison.~~ **Done**
-6. ~~FAQ · Application form · Google Sheets server action.~~ **Done** — integration built and inert until credentials arrive; see `docs/02-google-sheets-setup.md`
+6. ~~FAQ · Application form · Google Sheets server action.~~ **Done** — integration built and inert until credentials arrive; see `docs/google-sheets-setup.md`
 7. **Next:** SEO scaffolding (`sitemap.ts`, `robots.ts`, `manifest.ts`, `opengraph-image`), JSON-LD (`Person`, `Service`, `FAQPage`), then an accessibility and performance pass.
 
 Analytics remain deliberately uninstalled, per instruction. `src/app/layout.tsx`

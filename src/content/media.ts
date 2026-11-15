@@ -6,8 +6,8 @@
  * what the new picture actually shows. See `public/images/README.md`.
  *
  * These are Mohamed's own photographs, supplied by the client. They were
- * cropped to the aspect ratios below, resized, and saved without EXIF (so no
- * camera or GPS metadata ships with them).
+ * cropped to the aspect ratios below, resized down where needed, and saved
+ * without EXIF (so no camera or GPS metadata ships with them).
  */
 
 export type SiteImage = {
@@ -19,19 +19,33 @@ export type SiteImage = {
 };
 
 export const media = {
-  /** Full-bleed hero background. Face sits right of centre; see Hero for the
-   *  object-position that keeps it clear of the text at every breakpoint. */
-  heroBackground: {
-    src: "/images/coach-mohamed-hero.jpg",
-    width: 2400,
-    height: 1600,
-    alt: "Mohamed Naama on the gym floor where he coaches",
+  /**
+   * Hero background, art-directed: the tall crop below `lg`, the wide crop
+   * from `lg` up, both from the same original and served through one
+   * `<picture>` so only one file downloads.
+   *
+   * Both are capped at the original's 976px width — the source is a
+   * low-resolution frame and upscaling the file would only add weight, not
+   * detail. The screen upscale that remains is recorded in the README.
+   */
+  heroWide: {
+    src: "/images/coach-mohamed-hero-wide.jpg",
+    width: 976,
+    height: 549,
+    alt: "Mohamed Naama training outdoors in the rain, seen from behind",
   },
-  /** Landscape training shot used beside the coach's story. */
-  coachTraining: {
-    src: "/images/coach-mohamed-training.jpg",
+  heroTall: {
+    src: "/images/coach-mohamed-hero-tall.jpg",
+    width: 976,
+    height: 1220,
+    alt: "Mohamed Naama training outdoors in the rain, seen from behind",
+  },
+
+  /** Beside the coach's story on the homepage. */
+  coachRack: {
+    src: "/images/coach-mohamed-rack.jpg",
     width: 1600,
     height: 1143,
-    alt: "Mohamed Naama mid-set on a seated dumbbell curl",
+    alt: "Mohamed Naama in profile beside a loaded rack in the gym",
   },
 } as const satisfies Record<string, SiteImage>;
