@@ -169,14 +169,17 @@ export function Hero() {
             </Button>
           </div>
 
+          {/*
+            The three items need ~410px in a row; a phone has ~280–355px. A row
+            that wraps leaves one item stranded on a second line, so below sm
+            they stack as a short list instead, and from sm up they sit in one
+            row. Every item leads with a marker in the same 14px slot — a dot,
+            or the Instagram icon — so the labels line up when stacked.
+          */}
           <ul
-            className="anim-in flex flex-wrap items-center gap-x-5 gap-y-2 pt-1 text-xs text-mist-100/75"
+            className="anim-in flex flex-col items-start gap-y-2 pt-1 text-xs text-mist-100/75 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5"
             style={d(600)}
           >
-            {/* Every item leads with a marker in the same 14px slot — a dot,
-                or the Instagram icon — so when the row wraps on a phone the
-                labels still start on one line, and the wrapped item reads as
-                part of the list rather than a stray. */}
             {credentials.map((credential) => (
               <li key={credential} className="flex items-center gap-1.5">
                 <span aria-hidden className="flex w-3.5 shrink-0 justify-center">
@@ -186,8 +189,8 @@ export function Hero() {
               </li>
             ))}
             {/* Same type and color as the credentials, so it reads as part of
-                the row rather than a third call to action. -my-1/py-1 lift the
-                tap target to 24px without moving the row. */}
+                the list rather than a third call to action. -my-1/py-1 lift
+                the tap target to 24px without changing the spacing. */}
             <li>
               <a
                 href={site.social.instagram}
