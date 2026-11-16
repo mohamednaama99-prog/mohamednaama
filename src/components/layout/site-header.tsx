@@ -118,7 +118,15 @@ export function SiteHeader({
             >
               <div className="flex shrink-0 items-center justify-between border-b border-line-deep px-5 py-4">
                 <SheetTitle className="sr-only">Menu</SheetTitle>
-                <BrandLockup tone="deep" showWordmark={false} />
+                {/* Instagram sits beside the logo so it is always in view.
+                    At the foot of the scrolling list it fell below the fold
+                    on most phones, leaving a "Follow" heading with nothing
+                    under it. */}
+                <div className="flex items-center gap-4">
+                  <BrandLockup tone="deep" showWordmark={false} />
+                  <span aria-hidden className="h-6 w-px bg-line-deep" />
+                  <SocialLinks tone="deep" />
+                </div>
 
                 <SheetClose asChild>
                   <button
@@ -168,11 +176,6 @@ export function SiteHeader({
                         </li>
                       ))}
                     </ul>
-                  </div>
-
-                  <div className="flex flex-col gap-3">
-                    <h2 className="t-eyebrow text-ink-ondeep-muted">Follow</h2>
-                    <SocialLinks tone="deep" />
                   </div>
                 </nav>
               </div>

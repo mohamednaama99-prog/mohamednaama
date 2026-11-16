@@ -20,6 +20,23 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
+/**
+ * An email address is one unbreakable word, wider than a card on a phone.
+ * This gives it a single break point, before the "@", so a narrow card shows
+ * the name and the domain on two clean lines instead of overflowing.
+ */
+function breakableEmail(address: string): ReactNode {
+  const at = address.indexOf("@");
+  if (at <= 0) return address;
+  return (
+    <>
+      {address.slice(0, at)}
+      <wbr />
+      {address.slice(at)}
+    </>
+  );
+}
+
 function ContactCard({
   icon,
   label,
@@ -32,7 +49,7 @@ function ContactCard({
 }: {
   icon: ReactNode;
   label: string;
-  value: string;
+  value: ReactNode;
   hint: string;
   href: string;
   external?: boolean;
@@ -40,7 +57,9 @@ function ContactCard({
   featured?: boolean;
 }) {
   return (
-    <Reveal delay={delay}>
+    /* min-w-0: a grid item is otherwise at least as wide as its longest
+       word, which is what pushed the cards off the screen. */
+    <Reveal delay={delay} className="min-w-0">
       <a
         href={href}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -56,7 +75,7 @@ function ContactCard({
           <span className="t-eyebrow text-ink-muted">{label}</span>
           <span
             data-numeric
-            className="font-display text-xl leading-tight text-ink"
+            className="font-display text-xl leading-tight text-ink wrap-anywhere"
             style={{ fontVariationSettings: '"wdth" 110, "wght" 680' }}
           >
             {value}
@@ -120,7 +139,7 @@ export default function ContactPage() {
               <ContactCard
                 icon={<Mail aria-hidden className="size-5" />}
                 label="Email"
-                value={site.email}
+                value={breakableEmail(site.email)}
                 hint="For anything longer."
                 href={`mailto:${site.email}`}
                 delay={90}

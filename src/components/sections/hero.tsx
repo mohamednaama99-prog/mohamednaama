@@ -3,12 +3,15 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowRight } from "lucide-react";
 
+import { SocialIcon } from "@/components/icons/social";
 import { Button } from "@/components/ui/button";
 import { media } from "@/content/media";
-import { credentials, hero } from "@/content/site";
+import { credentials, hero, site, socialHandle } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
+
+const instagram = socialHandle("instagram");
 
 /**
  * `sizes` has to describe the width the image is *rendered* at, not the width
@@ -166,16 +169,43 @@ export function Hero() {
             </Button>
           </div>
 
+          {/*
+            The three items need ~410px in a row; a phone has ~280–355px. A row
+            that wraps leaves one item stranded on a second line, so below sm
+            they stack as a short list instead, and from sm up they sit in one
+            row. Every item leads with a marker in the same 14px slot — a dot,
+            or the Instagram icon — so the labels line up when stacked.
+          */}
           <ul
-            className="anim-in flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-mist-100/75"
+            className="anim-in flex flex-col items-start gap-y-2 pt-1 text-xs text-mist-100/75 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5"
             style={d(600)}
           >
             {credentials.map((credential) => (
-              <li key={credential} className="flex items-center gap-2">
-                <span aria-hidden className="h-1 w-1 rounded-full bg-tan-500" />
+              <li key={credential} className="flex items-center gap-1.5">
+                <span aria-hidden className="flex w-3.5 shrink-0 justify-center">
+                  <span className="size-1 rounded-full bg-tan-500" />
+                </span>
                 {credential}
               </li>
             ))}
+            {/* Same type and color as the credentials, so it reads as part of
+                the list rather than a third call to action. -my-1/py-1 lift
+                the tap target to 24px without changing the spacing. */}
+            <li>
+              <a
+                href={site.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${site.name} on Instagram, ${instagram} (opens in a new tab)`}
+                className="-my-1 flex items-center gap-1.5 py-1 whitespace-nowrap transition-colors hover:text-mist-100"
+              >
+                <SocialIcon
+                  platform="instagram"
+                  className="size-3.5 shrink-0 text-tan-500"
+                />
+                {instagram}
+              </a>
+            </li>
           </ul>
         </div>
       </div>
