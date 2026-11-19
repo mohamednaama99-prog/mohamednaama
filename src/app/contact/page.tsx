@@ -169,7 +169,7 @@ export default function ContactPage() {
             >
               <h3 className="t-h3">Follow along</h3>
               <p className="text-sm text-ink-muted">
-                Training, coaching notes and behind the scenes.
+                Follow Mohamed on Instagram.
               </p>
               <SocialLinks tone="light" className="pt-1" />
             </Reveal>

@@ -30,12 +30,12 @@ export const seo = {
   contact: {
     title: "Contact Your Online Personal Trainer",
     description:
-      "Questions about online fitness coaching? Message Mohamed Naama on WhatsApp or by email, or apply for a coaching plan in a couple of minutes.",
+      "Questions about online fitness coaching? Message Mohamed Naama on WhatsApp or by email, or apply for a coaching plan online.",
   },
   apply: {
     title: "Apply for Online Fitness Coaching",
     description:
-      "Apply for online personal training with Mohamed Naama. Pick a weekly or daily coaching plan, or just ask a question, and he replies on WhatsApp.",
+      "Apply for online personal training with Mohamed Naama. Tell him about your goals, health and training, pick a weekly or daily plan or leave it open, and he follows up on WhatsApp.",
   },
   privacy: {
     title: "Privacy Policy",

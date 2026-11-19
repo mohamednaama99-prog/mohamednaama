@@ -28,7 +28,8 @@ export function SegmentedControl({
   segments: readonly Segment[];
   /** Accessible name for the whole group. */
   label: string;
-  size?: "default" | "sm";
+  /** "touch" keeps every segment at the 44px minimum tap height. */
+  size?: "default" | "sm" | "touch";
   className?: string;
 }) {
   return (
@@ -51,10 +52,16 @@ export function SegmentedControl({
             "text-ink-muted hover:text-ink",
             "focus-visible:ring-2 focus-visible:ring-tan-500 focus-visible:ring-offset-1",
             "data-[state=checked]:bg-navy-800 data-[state=checked]:text-mist-100 data-[state=checked]:shadow-soft",
-            size === "sm" ? "px-3 py-2 text-xs" : "px-4 py-2.5 text-sm",
+            size === "sm"
+              ? "px-3 py-2 text-xs"
+              : size === "touch"
+                ? /* Tighter below sm, and 13px text below 360px, so three
+                     segments fit whole on a 320px screen. */
+                  "min-h-11 px-1.5 py-2 text-[0.8125rem] min-[360px]:text-sm sm:px-3"
+                : "px-4 py-2.5 text-sm",
           )}
         >
-          <span className="block">{segment.label}</span>
+          <span className="block truncate">{segment.label}</span>
           {segment.sublabel ? (
             <span className="block text-[0.6875rem] opacity-70">
               {segment.sublabel}

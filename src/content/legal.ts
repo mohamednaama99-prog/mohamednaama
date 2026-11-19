@@ -28,29 +28,48 @@ export type LegalDocument = {
 export const privacy: LegalDocument = {
   slug: "privacy",
   title: "Privacy Policy",
-  lastUpdated: "November 16, 2026",
+  lastUpdated: "November 19, 2026",
   intro:
     "This policy explains what this website collects, why, and what happens to it. It covers the website only — anything you later share directly with Mohamed over WhatsApp is part of your coaching relationship with him.",
   sections: [
     {
       heading: "What this site collects",
       body: [
-        "The application form is the only place this website asks for personal information. It collects your name, email address, mobile number, the coaching plan you are interested in, your main training goal, your training experience, where you train, how many days a week you can train, and anything you choose to write in the free-text field.",
+        "The application form is the only place this website asks for personal information. It asks for:",
+        "Your contact details: your name, email address and WhatsApp number. About you: your age, gender, height and current weight, and, if you choose to give them, your occupation and working schedule.",
+        "Your goals: your primary goal, and, if you choose to answer, your target weight, the areas you want to improve, why it matters to you, any deadline or event, your ideal physique and what has held you back before.",
+        "Your health: whether you have a medical condition, have had surgery, have an injury, have joint pain or limitations, or have a heart or breathing condition, and the details you give for any you answer Yes to.",
+        "Your training and availability: how long you have trained, whether and how you train now, where you train, exercises you enjoy or avoid, how many days and minutes you can commit, and which days suit you. Your plan: the coaching plan you are interested in.",
         "Nothing else on the site collects personal information. There is no analytics, no advertising, no tracking pixels and no cookies set by this website.",
       ],
     },
     {
       heading: "Why it is collected",
       body: [
-        "To respond to your application and to work out whether coaching is a fit for you, and which plan suits. The training questions exist so that the first conversation is useful rather than a questionnaire.",
+        "To review your application, to work out whether coaching is a fit for you and which plan suits, and, if you start coaching, to build your program.",
         "Submitting the form is a request to be contacted. You confirm that explicitly with the consent checkbox before the form can be sent.",
+      ],
+    },
+    {
+      heading: "Your health information",
+      body: [
+        "The health questions are there because a safe program depends on them. Your answers to them, and any details you give, are used only to review your application and to build your coaching program. They are not used for anything else.",
+        "Because this information is sensitive, the form asks for your separate, explicit consent to collect and use it before it can be sent.",
+        "It is stored with the rest of your application in the private Google Sheet described below. It is never sold, and never shared with anyone.",
       ],
     },
     {
       heading: "Where it goes",
       body: [
-        "Submissions are recorded in a private Google Sheet that only Mohamed can access, and the follow-up conversation happens on WhatsApp using the number you provide.",
-        "Your details are not sold, rented, or shared with anyone for marketing. They are not passed to third parties beyond the services needed to run the site and store the submission.",
+        "Each application is written automatically into a private Google Sheet that only Mohamed can access. The follow-up conversation happens on WhatsApp, using the number you provide.",
+        "Your details are never sold, rented, or shared with anyone for marketing. They are not passed to third parties beyond the services needed to run the site and store the application.",
+      ],
+    },
+    {
+      heading: "While you fill in the form",
+      body: [
+        "So that a refresh or a dropped connection does not lose your answers, the form keeps them in your browser's session storage as you go. They stay on your device, are cleared as soon as your application is sent, and are discarded when you close the tab.",
+        "To protect the form from automated abuse, the site counts recent submissions from each IP address for a few minutes. That count is held only in memory and is never stored with your application.",
       ],
     },
     {
@@ -62,13 +81,17 @@ export const privacy: LegalDocument = {
     {
       heading: "Your choices",
       body: [
-        "You can ask what is held about you, ask for it to be corrected, or ask for it to be deleted. Email Mohamed or message him on WhatsApp — both are on the contact page — and say what you would like done.",
+        `You can ask what is held about you, including your health information, ask for it to be corrected, or ask for it to be deleted. ${
+          site.email
+            ? `Email Mohamed at ${site.email} and say what you would like done.`
+            : "Contact Mohamed through the contact page and say what you would like done."
+        }`,
       ],
     },
     {
       heading: "Third-party services",
       body: [
-        "This site is hosted on a web hosting provider, which keeps standard server logs. Form submissions are stored using Google Sheets, and WhatsApp is used for the conversation afterwards. Each of those services handles data under its own terms.",
+        "This site is hosted on a web hosting provider, which keeps standard server logs. Applications are stored using Google Sheets, and WhatsApp is used for the conversation afterwards. Each of those services handles data under its own terms.",
       ],
     },
     {
@@ -83,7 +106,7 @@ export const privacy: LegalDocument = {
 export const terms: LegalDocument = {
   slug: "terms",
   title: "Terms & Conditions",
-  lastUpdated: "November 16, 2026",
+  lastUpdated: "November 19, 2026",
   intro:
     "These terms cover the use of this website and the online coaching offered through it. The plan, price and payment arrangement for your coaching are confirmed directly with Mohamed before you start; cancellation and refunds follow the Refunds & Cancellation policy.",
   sections: [
@@ -93,6 +116,10 @@ export const terms: LegalDocument = {
         "This site presents the online coaching Mohamed Naama offers and lets you apply for it. There is no checkout, no payment processing and no booking system here.",
         "Submitting the application form is a request, not a purchase and not a confirmed place. Nothing on this site forms a coaching agreement on its own.",
       ],
+    },
+    {
+      heading: "Who can apply",
+      body: ["You must be 18 or older to apply for coaching."],
     },
     {
       heading: "How enrollment works",
@@ -117,7 +144,7 @@ export const terms: LegalDocument = {
     {
       heading: "What is expected of you",
       body: [
-        "Coaching depends on the information you give. You are responsible for describing your training history, your injuries and your health honestly, and for telling Mohamed if any of that changes during the term.",
+        "Coaching depends on the information you give. You are responsible for answering the application's health and training questions honestly, and for telling Mohamed if any of that changes during the term. How your health information is handled is set out in the Privacy Policy.",
         "You are responsible for carrying out the program as written, for logging your sessions, and for replying at check-ins.",
       ],
     },

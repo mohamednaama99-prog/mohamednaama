@@ -55,14 +55,14 @@ export const faq: FaqItem[] = [
     id: "equipment",
     question: "Do I need a gym membership?",
     answer:
-      "Tell Mohamed what you have access to in your application — a full gym, a home setup, or minimal equipment — and the program is written around it.",
+      "The application asks where you train — a commercial gym, a home gym, at home with no equipment, or outdoors — and the program is written around what you have.",
     needsClientAnswer: true,
   },
   {
     id: "beginners",
     question: "Is this suitable if I am new to training?",
     answer:
-      "Experience level is one of the first things the application asks about, and the program is written from there. If you are unsure whether coaching is right for you yet, say so in the form and Mohamed will tell you honestly.",
+      "The application asks how long you have been training, including if you never have, and the program is written from there. If you are unsure whether coaching is right for you yet, message Mohamed on WhatsApp before you apply and he will tell you honestly.",
     needsClientAnswer: true,
   },
   {

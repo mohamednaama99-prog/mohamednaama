@@ -41,8 +41,8 @@ export function FinalCta() {
 
         <Reveal delay={170}>
           <p className="t-lede max-w-[48ch] text-ink-ondeep-muted">
-            One short application, whether you have picked a plan or just want
-            to ask a question. No payment and no booking — Mohamed picks the
+            One application, whether you have picked a plan or are still
+            deciding. No payment and no booking — Mohamed picks the
             conversation up on WhatsApp.
           </p>
         </Reveal>

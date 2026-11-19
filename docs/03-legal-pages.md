@@ -22,7 +22,9 @@ jurisdiction is stated anywhere, because none was supplied. None was invented.
 | **Legal entity and address** | `terms`, `privacy` | Who the visitor is contracting with, and who controls their data |
 | **Governing law / jurisdiction** | `terms` | Which country's law applies to a dispute |
 | **Whether a data-protection regime applies** | `privacy` | The audience is stated as US-only. If clients in the EU/UK are accepted, the policy needs GDPR rights, a lawful basis and a retention period stated explicitly |
-| **Retention period** | `privacy` | Currently "while relevant", which is honest but vague |
+| **Retention period** | `privacy` | Currently "while relevant", which is honest but vague. Matters more now that health information is collected |
+| **Health-data review** | `privacy`, `form.ts` | The form now collects health information (medical conditions, surgery, injuries, joint pain, heart or breathing conditions) under a separate explicit consent. Several US states regulate consumer health data (for example Washington's My Health My Data Act), so this is worth a lawyer's look before launch |
+| **Minimum age** | `terms`, `form.ts` | Terms now say 18 or older, matching the form's age check (`limits.minAge`). Confirm, or change both together |
 
 ## Supplied by the client
 
@@ -39,10 +41,19 @@ jurisdiction is stated anywhere, because none was supplied. None was invented.
 
 Only these, all verifiable from the code:
 
-- The form collects name, email, phone, plan, goal, experience, training
-  access, days per week, and an optional message (`src/content/form.ts`).
+- The form collects the client's New Client Application questionnaire:
+  contact details, age, gender, height, weight, goals, five health questions
+  with details, training history and availability, and the plan
+  (`src/content/form.ts`). The privacy policy lists them by group; if a
+  question is added or removed there, update "What this site collects".
+- Health information is used only to review the application and build the
+  program, is never sold or shared, and needs its own consent checkbox.
 - Submissions are written to a private Google Sheet (`src/lib/sheets.ts`) and
-  the follow-up happens on WhatsApp.
+  the follow-up happens on WhatsApp. Access, correction and deletion requests
+  go to `site.email`.
+- Answers in progress are kept in the browser's sessionStorage (cleared on
+  submit and when the tab closes), and the server counts submissions per IP in
+  memory for rate limiting. Neither is stored with the application.
 - There is no analytics, no advertising and no cookies set by the site — true
   today, and **this claim has to be revisited the moment GA4 is added**.
 - There is no checkout; enrollment and payment are arranged directly.

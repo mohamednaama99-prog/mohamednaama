@@ -1,97 +1,118 @@
 "use server";
 
-import { formFields } from "@/content/form";
-import { toE164 } from "@/lib/phone";
-import { appendRow, isSheetsConfigured } from "@/lib/sheets";
+import { headers } from "next/headers";
+
+import { limits } from "@/content/form";
+import { toSheetRow, toSheetsDateTime } from "@/lib/application-sheet";
+import { allowSubmission, clientIp } from "@/lib/rate-limit";
+import {
+  appendApplicationRow,
+  getSpreadsheetTimeZone,
+  readSheetsConfig,
+} from "@/lib/sheets";
 import {
   applicationSchema,
   fieldErrorsFrom,
   HONEYPOT_FIELD,
 } from "@/lib/validation";
 
-/* A "use server" module may only export async functions. Types are erased at
-   compile time so they are fine here; values are not. */
-export type ApplicationState = {
-  status: "idle" | "success" | "error";
-  message?: string;
-  fieldErrors?: Record<string, string>;
-  /** True only when a development build accepted a submission that was never
-   *  stored. Never set in production. */
-  devMock?: boolean;
-};
+/* A "use server" module may only export async functions; types are erased at
+   compile time, so exporting one is fine. */
+export type SubmitResult =
+  | { status: "success" }
+  | { status: "invalid"; fieldErrors: Record<string, string> }
+  | { status: "rate-limited" }
+  | { status: "failed" };
 
-/** Column order in the spreadsheet. Submitted-at first, then the fields. */
-const columns = [
-  "submittedAt",
-  "packageId",
-  ...formFields.map((field) => field.name),
-];
+/** Metadata the form sends alongside the answers. Never stored. */
+const ELAPSED_FIELD = "elapsedMs";
 
-export async function submitApplication(
-  _previous: ApplicationState,
-  formData: FormData,
-): Promise<ApplicationState> {
-  /* Honeypot. Bots fill every field; people never see this one. Respond as
-     though it succeeded so the bot learns nothing. */
-  if (formData.get(HONEYPOT_FIELD)) {
+/**
+ * Receives one New Client Application.
+ *
+ * Order matters: the rate limit counts every call, the cheap bot checks run
+ * before validation, and nothing reaches Google until the payload has passed
+ * the same schema the browser used. A success is only ever returned for an
+ * application that was actually stored.
+ *
+ * What reaches the visitor is deliberately generic. What reaches the server
+ * log is a reason code — never an answer, a key or a token.
+ */
+export async function submitApplication(payload: unknown): Promise<SubmitResult> {
+  const ip = clientIp(await headers());
+  if (!allowSubmission(ip)) return { status: "rate-limited" };
+
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { status: "failed" };
+  }
+
+  const {
+    [HONEYPOT_FIELD]: honeypot,
+    [ELAPSED_FIELD]: elapsedMs,
+    ...answers
+  } = payload as Record<string, unknown>;
+
+  /* Honeypot: people never see this field; bots fill everything. Answer as
+     though it worked, so a bot learns nothing. */
+  if (typeof honeypot === "string" && honeypot.trim()) {
     return { status: "success" };
   }
 
-  const raw = {
-    packageId: formData.get("packageId") ?? "",
-    ...Object.fromEntries(
-      formFields.map((field) => [field.name, formData.get(field.name) ?? ""]),
-    ),
-  };
+  /* Five steps of questions cannot be answered in a few seconds. Too fast is
+     treated as a failure rather than a fake success, so a real person who
+     somehow trips it sees the retry banner instead of losing their answers. */
+  if (
+    typeof elapsedMs !== "number" ||
+    !Number.isFinite(elapsedMs) ||
+    elapsedMs < limits.minSecondsToSubmit * 1000
+  ) {
+    return { status: "failed" };
+  }
 
-  const parsed = applicationSchema.safeParse(raw);
-
+  const parsed = applicationSchema.safeParse(answers);
   if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Check the highlighted fields and try again.",
-      fieldErrors: fieldErrorsFrom(parsed.error),
-    };
+    const fieldErrors = fieldErrorsFrom(parsed.error);
+    /* Unknown keys or a malformed shape: nothing a visitor could fix. */
+    if (Object.keys(fieldErrors).length === 0) return { status: "failed" };
+    return { status: "invalid", fieldErrors };
   }
 
-  const data = parsed.data as Record<string, unknown>;
-
-  const values = columns.map((column) => {
-    if (column === "submittedAt") return new Date().toISOString();
-    if (column === "phone") return toE164(String(data.phone ?? ""));
-    return String(data[column] ?? "");
-  });
-
-  /*
-   * A success state is only ever shown when the submission was actually
-   * stored.
-   *
-   * Until the client supplies the spreadsheet and credentials there is nowhere
-   * to store it, so in production this is an error: the visitor is told
-   * plainly that it did not reach Mohamed and is pointed at WhatsApp. A
-   * development build accepts it so the flow can be reviewed, and flags it as
-   * a mock so the UI can say so.
-   */
-  if (!isSheetsConfigured()) {
-    if (process.env.NODE_ENV === "production") {
-      console.error(
-        "[application] Rejected: Google Sheets is not configured, so the submission could not be stored.",
-      );
-      return { status: "error", message: "not-stored" };
+  /* Development only: rehearse each outcome without a spreadsheet. Production
+     builds inline NODE_ENV, so this branch does not exist there. */
+  if (process.env.NODE_ENV !== "production") {
+    const simulate = process.env.APPLY_DEV_SIMULATE;
+    if (simulate === "success") return { status: "success" };
+    if (simulate === "invalid") {
+      /* What a server-side rejection looks like: the real schema, run on a
+         copy with a broken email, so the form jumps back to step 1. */
+      const rejected = applicationSchema.safeParse({ ...answers, email: "not-an-email" });
+      return rejected.success
+        ? { status: "failed" }
+        : { status: "invalid", fieldErrors: fieldErrorsFrom(rejected.error) };
     }
-
-    console.warn(
-      "[application] DEV MOCK — not stored anywhere. Google Sheets is not configured.\nPayload:",
-      Object.fromEntries(columns.map((column, i) => [column, values[i]])),
-    );
-    return { status: "success", devMock: true };
+    if (simulate === "failure") return { status: "failed" };
+    if (simulate === "rate-limited") return { status: "rate-limited" };
   }
 
-  const result = await appendRow(values);
+  const { config, missing } = readSheetsConfig();
+  if (!config) {
+    console.error(
+      `[application] Not stored: Google Sheets is not configured. Missing environment variable(s): ${missing.join(", ")}`,
+    );
+    return { status: "failed" };
+  }
+
+  const timeZone = await getSpreadsheetTimeZone(config);
+  const row = toSheetRow(parsed.data, toSheetsDateTime(new Date(), timeZone));
+  const result = await appendApplicationRow(config, row);
 
   if (result.status !== "appended") {
-    console.error("[application] Sheets append failed:", result);
-    return { status: "error", message: "not-stored" };
+    const detail =
+      result.status === "failed"
+        ? `${result.code}${result.httpStatus ? ` (HTTP ${result.httpStatus})` : ""}`
+        : "not configured";
+    console.error(`[application] Not stored: Google Sheets ${detail}`);
+    return { status: "failed" };
   }
 
   return { status: "success" };
