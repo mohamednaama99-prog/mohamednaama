@@ -8,9 +8,15 @@
 
 export const US_DIAL_CODE = "+1";
 
-/** Digits only, capped at the 10 national digits. */
+/**
+ * Digits only, capped at the 10 national digits. A pasted or autofilled
+ * "+1 347 653 7295" keeps its national number rather than losing the last
+ * digit to the country code.
+ */
 export function normalizeUsPhone(input: string): string {
-  return input.replace(/\D/g, "").slice(0, 10);
+  let digits = input.replace(/\D/g, "");
+  if (digits.length === 11 && digits.startsWith("1")) digits = digits.slice(1);
+  return digits.slice(0, 10);
 }
 
 /** Formats as the visitor types: (212) 555-0147 */
@@ -30,9 +36,4 @@ const US_PHONE = /^[2-9]\d{2}[2-9]\d{6}$/;
 
 export function isValidUsPhone(digits: string): boolean {
   return US_PHONE.test(digits);
-}
-
-/** E.164, for storage: +12125550147 */
-export function toE164(digits: string): string {
-  return `${US_DIAL_CODE}${digits}`;
 }
