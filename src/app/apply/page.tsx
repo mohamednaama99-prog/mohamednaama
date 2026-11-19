@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Eyebrow } from "@/components/primitives/section";
-import { ApplicationForm } from "@/components/sections/application-form";
+import { ApplicationForm } from "@/components/application/application-form";
 import { formCopy } from "@/content/form";
 import { getPackage } from "@/content/packages";
 import { seo } from "@/content/seo";
@@ -40,14 +40,14 @@ async function PreselectedForm({
 
 function FormFallback() {
   return (
-    <div className="flex flex-col gap-5" aria-hidden>
-      <div className="h-32 animate-pulse rounded-xl bg-surface-sunken" />
-      <div className="grid gap-5 sm:grid-cols-2">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="h-16 animate-pulse rounded-md bg-surface-sunken" />
-        ))}
+    <div className="flex flex-col gap-8" aria-hidden>
+      <div className="flex flex-col gap-4">
+        <div className="h-1.5 animate-pulse rounded-full bg-surface-sunken" />
+        <div className="h-12 w-1/2 animate-pulse rounded-md bg-surface-sunken" />
       </div>
-      <div className="h-28 animate-pulse rounded-md bg-surface-sunken" />
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="h-20 animate-pulse rounded-md bg-surface-sunken" />
+      ))}
     </div>
   );
 }
@@ -72,14 +72,19 @@ export default function ApplyPage(props: {
           <div className="mt-10 grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
             <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
               <Eyebrow>{formCopy.eyebrow}</Eyebrow>
-              <h1 className="t-display-l max-w-[14ch]">{formCopy.heading}</h1>
+              <div className="flex flex-col gap-3">
+                <h1 className="t-display-l max-w-[14ch]">{formCopy.title}</h1>
+                <p className="font-display text-lg text-accent-text sm:text-xl">
+                  {formCopy.subtitle}
+                </p>
+              </div>
               <p className="t-lede max-w-[44ch] text-ink-muted">
                 {formCopy.lede}
               </p>
             </div>
 
             <div className="flex flex-col gap-5">
-              <div className="rounded-xl border border-line bg-surface-raised p-6 sm:p-9">
+              <div className="rounded-xl border border-line bg-surface-raised p-5 sm:p-9">
                 <Suspense fallback={<FormFallback />}>
                   <PreselectedForm searchParams={props.searchParams} />
                 </Suspense>
