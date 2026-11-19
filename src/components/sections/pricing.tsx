@@ -7,7 +7,7 @@ export function Pricing() {
       <SectionHeading
         eyebrow="Coaching plans"
         title="Pick a term, then pick your rhythm."
-        lede="Two choices, and you have your plan. Every route from here goes to the same short application — no checkout, no booking system."
+        lede="Two choices, and you have your plan. Every route from here goes to the same application — no checkout, no booking system."
         align="center"
       />
 
