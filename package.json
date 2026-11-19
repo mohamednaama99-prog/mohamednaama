@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sheets:setup": "tsx --conditions=react-server --tsconfig tsconfig.json scripts/sheets-setup.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
