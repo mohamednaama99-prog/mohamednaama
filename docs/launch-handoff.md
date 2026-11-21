@@ -325,10 +325,14 @@ on the homepage → **Request indexing**.
 - **Do not rename or delete the Applications tab**, and keep its header row.
   Without them the form stops saving (the visitor sees the WhatsApp fallback)
   until `npm run sheets:setup` is run.
+- **WhatsApp** is always in full international format with the country code,
+  for example `+1 212 555 0147` or `+44 7911 123456`. A number typed without
+  a country code is a US number.
 - Health answers read `No`, or `Yes - ` followed by the applicant's details.
-- An answer that starts with `=`, `+`, `-` or `@` is shown with a leading
+- A typed answer that starts with `=`, `+`, `-` or `@` is shown with a leading
   apostrophe (for example `'+ night shifts`). That is deliberate: it stops the
-  text being treated as a formula if the sheet is exported.
+  text being treated as a formula if the sheet is exported. The WhatsApp
+  column has no apostrophe: it is validated as a phone number.
 
 ---
 
@@ -394,8 +398,10 @@ For reference; nothing here needs doing.
 - **Rate limits.** 5 per visitor per 10 minutes in the code, plus the edge
   rule in 8.1.
 - **Spreadsheet safety.** Values are written with `valueInputOption=RAW`, so
-  nothing is ever run as a formula, and answers starting with `=`, `+`, `-`,
-  `@` or a tab get a leading apostrophe for when the sheet is exported. The
+  nothing is ever run as a formula, and typed answers starting with `=`, `+`,
+  `-`, `@` or a tab get a leading apostrophe for when the sheet is exported.
+  The WhatsApp number is validated for its country with libphonenumber-js and
+  stored as `+`, digits and spaces, so it needs no apostrophe. The
   header row is checked before every write, so an application is never written
   into an emptied tab's header row.
 - **Secrets.** The Google code imports `server-only`, uses only the

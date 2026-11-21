@@ -1,6 +1,6 @@
 import { allFields, planCopy, type FormField } from "@/content/form";
 import { getPackage } from "@/content/packages";
-import { formatUsPhone } from "@/lib/phone";
+import { formatPhoneInternational } from "@/lib/phone";
 import type { ApplicationData } from "@/lib/validation";
 
 /**
@@ -144,9 +144,8 @@ export function formatAnswer(field: FormField, value: unknown): string | number 
       return typeof value === "number" ? value : "";
 
     case "phone":
-      /* National format: it reads as text, and with no leading "+" it needs no
-         apostrophe from the injection guard. */
-      return formatUsPhone(String(value ?? ""));
+      /* Full international format, +44 7911 123456, for every country. */
+      return formatPhoneInternational(String(value ?? ""));
 
     case "choice":
       return labelOf(field, String(value ?? ""));
@@ -232,6 +231,10 @@ export function toSheetRow(
     if (column.kind === "status") return NEW_STATUS;
     if (column.kind === "date") return submittedAt;
     const value = formatAnswer(column.field!, data[column.field!.name]);
-    return typeof value === "string" ? escapeCell(value) : value;
+    if (typeof value !== "string") return value;
+    /* A validated phone number is "+", digits and spaces, so it can never be
+       a formula: it is written as is, without the guard's apostrophe. */
+    if (column.kind === "phone" && /^\+[\d ]+$/.test(value)) return value;
+    return escapeCell(value);
   });
 }
