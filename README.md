@@ -6,7 +6,7 @@ plans and FAQ, About and Contact pages, the legal pages, and a five-step
 saved as one row in a Google Sheet, and the applicant continues on WhatsApp.
 No payment is taken on the site.
 
-Launching or handing over? Follow **[docs/launch-handoff.md](docs/launch-handoff.md)**.
+
 
 ## Stack
 
