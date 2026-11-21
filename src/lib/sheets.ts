@@ -2,7 +2,7 @@ import "server-only";
 
 import { createPrivateKey, createSign } from "node:crypto";
 
-import { appendRange } from "@/lib/application-sheet";
+import { answerColumns, appendRange, APPLICATIONS_TAB } from "@/lib/application-sheet";
 
 /**
  * Google Sheets, with no SDK dependency.
@@ -74,6 +74,7 @@ export type GoogleErrorCode =
   | "malformed-key"
   | "invalid-credentials"
   | "api-disabled"
+  | "missing-tab"
   | "no-access"
   | "not-found"
   | "rate-limited"
@@ -115,6 +116,10 @@ function classify(status: number, body: GoogleErrorBody): GoogleApiError {
 
   if (reasons.includes("SERVICE_DISABLED") || /has not been used|is disabled/i.test(message)) {
     return new GoogleApiError("api-disabled", status, message, activationUrl);
+  }
+  /* A range naming a tab that does not exist. */
+  if (status === 400 && /unable to parse range/i.test(message)) {
+    return new GoogleApiError("missing-tab", status, message);
   }
   if (status === 400 && /invalid_grant|invalid_client|JWT|signature/i.test(`${body.error} ${message}`)) {
     return new GoogleApiError("invalid-credentials", status, message);
@@ -245,11 +250,19 @@ export async function getSpreadsheetTimeZone(config: SheetsConfig): Promise<stri
 
 export type AppendResult =
   | { status: "appended"; updatedRange: string }
-  | { status: "not-configured"; missing: string[] }
+  /** The Applications tab or its header row is gone: run the setup script. */
+  | { status: "not-set-up"; missing: "tab" | "header" }
   | { status: "failed"; code: GoogleErrorCode; httpStatus: number | null };
+
+const headerCheckRange = `${APPLICATIONS_TAB}!A1:B1`;
+const expectedHeader = answerColumns.slice(0, 2).map((c) => c.header.toLowerCase());
 
 /**
  * Appends one application.
+ *
+ * The header row is checked first. Without it, an append into an empty tab
+ * would put the application in row 1, where the header belongs, and every
+ * later one would line up under the wrong labels.
  *
  * RAW: nothing written is ever parsed as a formula, a number or a date — the
  * submitted-at serial and the age are sent as JSON numbers, everything else as
@@ -262,6 +275,15 @@ export async function appendApplicationRow(
   row: (string | number)[],
 ): Promise<AppendResult> {
   try {
+    const header = await sheetsRequest<{ values?: unknown[][] }>(
+      config,
+      `/values/${encodeURIComponent(headerCheckRange)}`,
+    );
+    const found = (header.values?.[0] ?? []).map((v) => String(v ?? "").trim().toLowerCase());
+    if (expectedHeader.some((label, i) => found[i] !== label)) {
+      return { status: "not-set-up", missing: "header" };
+    }
+
     const result = await sheetsRequest<{ updates?: { updatedRange?: string } }>(
       config,
       `/values/${encodeURIComponent(appendRange)}:append` +
@@ -270,6 +292,9 @@ export async function appendApplicationRow(
     );
     return { status: "appended", updatedRange: result.updates?.updatedRange ?? "" };
   } catch (error) {
+    if (error instanceof GoogleApiError && error.code === "missing-tab") {
+      return { status: "not-set-up", missing: "tab" };
+    }
     if (error instanceof GoogleApiError) {
       return { status: "failed", code: error.code, httpStatus: error.status };
     }

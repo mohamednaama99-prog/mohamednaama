@@ -8,11 +8,19 @@
  * claims a credential, a result, or a business detail.
  */
 
-const url = process.env.NEXT_PUBLIC_SITE_URL ?? "https://coachmohamednaama.com";
+/* NEXT_PUBLIC_SITE_URL once the domain is live. Until then a Vercel build
+   uses the project's own production address (its custom domain, or
+   <project>.vercel.app), which Vercel sets without the scheme. A local build
+   with neither falls back to localhost. */
+const vercelProduction = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+const url = (
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  (vercelProduction ? `https://${vercelProduction}` : "http://localhost:3000")
+).replace(/\/+$/, "");
 
 export const site = {
-  /** Production origin, from NEXT_PUBLIC_SITE_URL at deploy time. Drives the
-   *  canonical URLs, the Open Graph URLs and the sitemap. */
+  /** Production origin, fixed at build time. Drives the canonical URLs, the
+   *  Open Graph URLs, the sitemap and the JSON-LD. */
   url,
 
   name: "Mohamed Naama",
