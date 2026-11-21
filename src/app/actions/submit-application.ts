@@ -106,12 +106,18 @@ export async function submitApplication(payload: unknown): Promise<SubmitResult>
   const row = toSheetRow(parsed.data, toSheetsDateTime(new Date(), timeZone));
   const result = await appendApplicationRow(config, row);
 
-  if (result.status !== "appended") {
-    const detail =
-      result.status === "failed"
-        ? `${result.code}${result.httpStatus ? ` (HTTP ${result.httpStatus})` : ""}`
-        : "not configured";
-    console.error(`[application] Not stored: Google Sheets ${detail}`);
+  if (result.status === "not-set-up") {
+    console.error(
+      result.missing === "tab"
+        ? '[application] Not stored: the spreadsheet has no "Applications" tab. Run `npm run sheets:setup` to create it.'
+        : '[application] Not stored: the "Applications" tab has no header row. Run `npm run sheets:setup` to restore it.',
+    );
+    return { status: "failed" };
+  }
+  if (result.status === "failed") {
+    console.error(
+      `[application] Not stored: Google Sheets ${result.code}${result.httpStatus ? ` (HTTP ${result.httpStatus})` : ""}`,
+    );
     return { status: "failed" };
   }
 
