@@ -14,7 +14,7 @@ import {
   type MultiChoiceField,
   type Option,
 } from "@/content/form";
-import { formatUsPhone, normalizeUsPhone, US_DIAL_CODE } from "@/lib/phone";
+import { cleanPhoneInput, formatPhoneAsYouType } from "@/lib/phone";
 import { cn } from "@/lib/utils";
 import {
   detailsKey,
@@ -487,29 +487,22 @@ export function Field({
     case "phone":
       return (
         <Single field={field} error={error}>
-          <div className="flex items-stretch">
-            {/* Fixed country code: US only for now, so no selector. */}
-            <span
-              aria-hidden
-              className="flex items-center rounded-l-lg border border-r-0 border-line-strong bg-surface-sunken px-3.5 text-base text-ink-muted"
-            >
-              {US_DIAL_CODE}
-            </span>
-            <input
-              id={id}
-              name={field.name}
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel-national"
-              placeholder={field.placeholder}
-              value={formatUsPhone(value as string)}
-              onChange={(event) => onChange(normalizeUsPhone(event.target.value))}
-              required
-              aria-invalid={Boolean(error) || undefined}
-              aria-describedby={describe}
-              className={cn(inputClass, "rounded-l-none")}
-            />
-          </div>
+          {/* Any country: "+" and the country code, or a US number without
+              one. Kept as "+" and digits; shown grouped as it is typed. */}
+          <input
+            id={id}
+            name={field.name}
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder={field.placeholder}
+            value={formatPhoneAsYouType(value as string)}
+            onChange={(event) => onChange(cleanPhoneInput(event.target.value))}
+            required
+            aria-invalid={Boolean(error) || undefined}
+            aria-describedby={describe}
+            className={inputClass}
+          />
         </Single>
       );
 

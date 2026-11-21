@@ -11,7 +11,7 @@ import {
   type FormField,
 } from "@/content/form";
 import { packageIds } from "@/content/packages";
-import { isValidUsPhone, normalizeUsPhone } from "@/lib/phone";
+import { toE164 } from "@/lib/phone";
 
 /**
  * One schema for the New Client Application, used on both sides.
@@ -197,12 +197,20 @@ function schemaFor(field: FormField): z.ZodType {
       );
 
     case "phone":
-      /* The browser sends digits; anything else is normalized the same way. */
+      /* The browser sends "+" and digits, or digits alone for a US number.
+         Whatever arrives must be a real number for its country; it leaves
+         the schema in E.164 (+447911123456). */
       return z
         .string()
         .max(40)
-        .transform(normalizeUsPhone)
-        .refine(isValidUsPhone, msg.phone);
+        .transform((value, ctx) => {
+          const e164 = toE164(value);
+          if (!e164) {
+            ctx.addIssue({ code: "custom", message: msg.phone });
+            return z.NEVER;
+          }
+          return e164;
+        });
 
     case "age":
       return z

@@ -1,39 +1,62 @@
 /**
- * US phone numbers.
+ * WhatsApp numbers, any country.
  *
- * The audience is United States only for now, so the country code is fixed at
- * +1 and there is no country selector. Shared by the form and the server action
- * so client and server apply exactly the same rule.
+ * A visitor can type a number with its country code (+44 7911 123456, or
+ * 0044 7911 123456) or, in the US, without one ((212) 555-0147). A number with
+ * no country code is read as a US number. Shared by the form and the server
+ * action, so the browser and the server apply exactly the same rule.
+ *
+ * Validation and formatting come from libphonenumber-js (Google's
+ * libphonenumber data): a number has to be a real, dialable number for its
+ * country.
  */
+import { AsYouType, parsePhoneNumberFromString } from "libphonenumber-js";
 
-export const US_DIAL_CODE = "+1";
+/** The country a number without a country code belongs to. */
+const DEFAULT_COUNTRY = "US";
+
+/** E.164 allows at most 15 digits. */
+const MAX_DIGITS = 15;
 
 /**
- * Digits only, capped at the 10 national digits. A pasted or autofilled
- * "+1 347 653 7295" keeps its national number rather than losing the last
- * digit to the country code.
+ * What the form keeps while the visitor types: a leading "+" if they typed
+ * one, then digits only. A leading "00" (the international prefix in most of
+ * the world) becomes "+"; no US number starts with 0, so this is unambiguous.
  */
-export function normalizeUsPhone(input: string): string {
-  let digits = input.replace(/\D/g, "");
-  if (digits.length === 11 && digits.startsWith("1")) digits = digits.slice(1);
-  return digits.slice(0, 10);
+export function cleanPhoneInput(input: string): string {
+  const trimmed = input.trim();
+  const digits = trimmed.replace(/\D/g, "");
+  if (trimmed.startsWith("+")) return `+${digits.slice(0, MAX_DIGITS)}`;
+  if (digits.startsWith("00")) return `+${digits.slice(2, 2 + MAX_DIGITS)}`;
+  return digits.slice(0, MAX_DIGITS);
 }
 
-/** Formats as the visitor types: (212) 555-0147 */
-export function formatUsPhone(input: string): string {
-  const digits = normalizeUsPhone(input);
-
-  if (digits.length <= 3) return digits;
-  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+/** Formats as the visitor types: (212) 555-0147, or +44 7911 123456. */
+export function formatPhoneAsYouType(input: string): string {
+  const clean = cleanPhoneInput(input);
+  if (!clean) return "";
+  return new AsYouType(clean.startsWith("+") ? undefined : DEFAULT_COUNTRY).input(clean);
 }
 
 /**
- * North American Numbering Plan: the area code and the exchange code both
- * start 2–9, so 10 digits alone is not enough to be valid.
+ * The number in E.164 (+447911123456), or null when it is not a valid number.
+ * Without a country code it is read as a US number.
  */
-const US_PHONE = /^[2-9]\d{2}[2-9]\d{6}$/;
+export function toE164(input: string): string | null {
+  const clean = cleanPhoneInput(input);
+  if (!/\d/.test(clean)) return null;
+  const parsed = parsePhoneNumberFromString(
+    clean,
+    clean.startsWith("+") ? undefined : DEFAULT_COUNTRY,
+  );
+  return parsed?.isValid() ? parsed.number : null;
+}
 
-export function isValidUsPhone(digits: string): boolean {
-  return US_PHONE.test(digits);
+/**
+ * How the number reads in the sheet: the full international format, grouped
+ * the way that country writes it (+1 212 555 0147, +44 7911 123456).
+ */
+export function formatPhoneInternational(input: string): string {
+  const parsed = parsePhoneNumberFromString(toE164(input) ?? "");
+  return parsed ? parsed.formatInternational() : input.trim();
 }

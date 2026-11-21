@@ -205,7 +205,7 @@ export const formSteps: readonly FormStep[] = [
         column: "WhatsApp",
         required: true,
         placeholder: "(212) 555-0147",
-        hint: "US numbers only. Mohamed replies on WhatsApp.",
+        hint: "Outside the US, start with your country code, e.g. +44. Mohamed replies on WhatsApp.",
       },
       {
         kind: "age",
@@ -594,7 +594,8 @@ export const validationMessages = {
   choose: "Choose one of the options.",
   fullName: "Enter your full name.",
   email: "Enter a valid email address.",
-  phone: "Enter a 10-digit US number, e.g. (212) 555-0147.",
+  phone:
+    "Enter a valid WhatsApp number. Outside the US, start with the country code, e.g. +44 7911 123456.",
   age: `Enter your age in years. You need to be at least ${limits.minAge}.`,
   height: "Enter your height.",
   heightRange: "That height looks out of range. Check the number and the unit.",
