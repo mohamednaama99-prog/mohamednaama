@@ -9,14 +9,19 @@ stock imagery remains on the site.
 | --- | --- | --- | --- | --- |
 | `coach-mohamed-pushup-wide.jpg` | `18.jpeg` | 4:3, full width | 1103×827 | Hero, `lg` and up |
 | `coach-mohamed-pushup-tall.jpg` | `18.jpeg` | x 190–975, y 840–2125 | 785×1285 | Hero below `lg` |
-| `coach-mohamed-gym-portrait.jpg` | `1.jpeg` | 7:5 around the face | 1600×1143 | Meet Coach Mohamed (homepage) |
+| `coach-mohamed-window-portrait.jpg` | `7.jpeg` | 7:5, full width, y 360–1303 | 1320×943 | Meet Coach Mohamed (homepage), Person JSON-LD |
 | `src/app/opengraph-image.jpg` | `18.jpeg` | composed card | 1200×630 | Social card (also `twitter-image.jpg`) |
 
 /about is text-only and uses no photograph.
 
-Every file is saved without EXIF and without an ICC profile. `18.jpeg` is
-tagged Display P3, so it is converted to sRGB first; dropping the profile
-without converting would shift the colors.
+Every file is saved as a progressive JPEG without EXIF and without an ICC
+profile. `18.jpeg` and `7.jpeg` are tagged Display P3, so they are converted
+to sRGB first; dropping the profile without converting would shift the
+colors.
+
+`7.jpeg` (1320×1468) has a 16px black bar along its top edge; the crop starts
+well below it. The 7:5 window keeps headroom above the hair, the eyes in the
+upper third and the crossed arms whole, and is cut at native resolution.
 
 ### The hero
 
